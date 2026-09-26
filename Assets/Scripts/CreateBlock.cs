@@ -1,127 +1,93 @@
-using NUnit.Framework;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
+//블록이 생성될 때 블록 안에 건물과 불씨를 랜덤으로 배치한다.
 public class CreateBlock : MonoBehaviour
 {
+    [Header("Building")]
     [SerializeField]
-    private float yMinRange;
+    private List<GameObject> buildingPrefabs;
     [SerializeField]
-    private float yMaxRange;
+    private float yMinRange = 0.8f; //건물 높이 배율 최소
     [SerializeField]
-    private float yEmberMinRange = 3;
+    private float yMaxRange = 2f; //건물 높이 배율 최대
     [SerializeField]
-    private float yEmberMaxRange = 35;
+    private float checkRadius = 40f; //건물끼리 최소 간격
+    [Header("Ember")]
     [SerializeField]
-    private float checkRadius;
+    private GameObject emberPrefab;
     [SerializeField]
-    private float checkEmberRadius;
+    private float emberRatio = 20f; //블록에 불씨가 생길 확률 (%)
     [SerializeField]
-    private float emberRatio;
+    private float yEmberMinRange = 5f; //불씨 높이 최소
     [SerializeField]
-    public GameObject emberPrefab;
+    private float yEmberMaxRange = 50f; //불씨 높이 최대
+    [SerializeField]
+    private float checkEmberRadius = 25f; //불씨와 다른 오브젝트의 최소 간격
 
-    public List<GameObject> buildingPrefabs;
+    private const int MaxTryCount = 100; //배치 시도 횟수
+    private const float BuildingArea = 40f; //블록 중심에서 건물이 놓일 수 있는 범위 (±)
+    private const float EmberArea = 45f; //블록 중심에서 불씨가 놓일 수 있는 범위 (±)
 
-    private List<Vector3> posVecs;
-    private float emberCount;
+    private readonly List<Vector3> occupiedPositions = new List<Vector3>(); //이미 배치된 위치 (높이 무시)
 
     void Start()
     {
-        posVecs = new List<Vector3>();
+        //불씨를 먼저 놓고, 건물은 불씨를 피해서 놓는다.
         if (Random.Range(0, 100) < emberRatio)
         {
-            emberCount = 1;
-            CreateEmberPrefab();
+            CreateEmber();
         }
-        else
-        {
-            emberCount = 0;
-        }
-        CreateBlockPrefab();
+        CreateBuildings();
     }
-
-
 
     [ContextMenu("블럭 생성")]
-    public void CreateBlockPrefab()
+    public void CreateBuildings()
     {
-
-        for (int k = 0; k < 100; k++)
+        for (int i = 0; i < MaxTryCount; i++)
         {
-            //int i = Random.Range(0, 500) % 5;
-            //int j = Random.Range(0, 500) % 5;
-            //Debug.Log(i + " " + j);
-
-            //float x = -50 + i * 20 + 10;
-            //float y = -50 + j * 20 + 10;
-            //x += Random.Range(ijMinRange, ijMaxRange);
-            //y += Random.Range(ijMinRange, ijMaxRange);
-
-            float x = Random.Range(-40f, 40f);
-            float y = Random.Range(-40f, 40f);
-            bool isOverLap = false;
-            foreach(Vector3 v in posVecs)
+            Vector3 position = new Vector3(Random.Range(-BuildingArea, BuildingArea), 0, Random.Range(-BuildingArea, BuildingArea));
+            if (IsOverlapped(position, checkRadius))
             {
-                if (Vector3.Distance(v, new Vector3(x, 0, y)) < checkRadius)
-                {
-                    isOverLap = true;
-                    break;
-                }
+                continue;
             }
-            if (!isOverLap)
-            {
-                GameObject instance = Instantiate(buildingPrefabs[Random.Range(0, buildingPrefabs.Count)], this.transform);
-                instance.transform.localScale = new Vector3(instance.transform.localScale.x, instance.transform.localScale.y * Random.Range(yMinRange, yMaxRange), instance.transform.localScale.z * 1);
-                instance.transform.localPosition = new Vector3(x, 0, y);
-                posVecs.Add(new Vector3(x, 0, y));
-            }
-            //StartCoroutine(createCorutine());
+
+            GameObject building = Instantiate(buildingPrefabs[Random.Range(0, buildingPrefabs.Count)], transform);
+            Vector3 scale = building.transform.localScale;
+            scale.y *= Random.Range(yMinRange, yMaxRange);
+            building.transform.localScale = scale;
+            building.transform.localPosition = position;
+            occupiedPositions.Add(position);
         }
     }
 
-    public void CreateEmberPrefab()
+    //빈 자리를 찾으면 불씨 하나를 놓는다.
+    private void CreateEmber()
     {
-        int count = 0;
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < MaxTryCount; i++)
         {
-            float x = Random.Range(-45f, 45f);
-            float y = Random.Range(-45f, 45f);
-            bool isOverLap = false;
-            foreach (Vector3 v in posVecs)
+            Vector3 position = new Vector3(Random.Range(-EmberArea, EmberArea), 0, Random.Range(-EmberArea, EmberArea));
+            if (IsOverlapped(position, checkEmberRadius))
             {
-                if (Vector3.Distance(v, new Vector3(x, 0, y)) < checkEmberRadius)
-                {
-                    isOverLap = true;
-                    break;
-                }
+                continue;
             }
-            if (!isOverLap)
-            {
-                GameObject instance = Instantiate(emberPrefab, this.transform);
-                instance.transform.localPosition = new Vector3(x, Random.Range(yEmberMinRange, yEmberMaxRange), y);
-                posVecs.Add(new Vector3(x, 0, y));
-                count++;
-            }
-            if (count >= emberCount)
-            {
-                return;
-            }
+
+            GameObject ember = Instantiate(emberPrefab, transform);
+            ember.transform.localPosition = new Vector3(position.x, Random.Range(yEmberMinRange, yEmberMaxRange), position.z);
+            occupiedPositions.Add(position);
+            return;
         }
     }
 
-    [ContextMenu("취~소!")]
-    public void DestroyBuilding()
+    private bool IsOverlapped(Vector3 position, float radius)
     {
-        GameObject[] walls = GameObject.FindGameObjectsWithTag("Wall");
-        foreach(GameObject wall in walls)
+        foreach (Vector3 occupied in occupiedPositions)
         {
-            DestroyImmediate(wall);
+            if (Vector3.Distance(occupied, position) < radius)
+            {
+                return true;
+            }
         }
+        return false;
     }
-
-
 }
- 

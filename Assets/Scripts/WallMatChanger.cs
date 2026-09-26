@@ -1,78 +1,39 @@
-using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
 
+//카메라와 플레이어 사이를 가리는 벽을 잠시 투명하게 바꾼다. (VoulmeManager.DetectWall에서 호출)
 public class WallMatChanger : MonoBehaviour
 {
-
-    private Renderer rend;
-    private bool isInvisible = false;
-    private bool isLightUp = false;
     [SerializeField]
     private Material defaultMat;
     [SerializeField]
     private Material invisibleMat;
     [SerializeField]
-    private Material lightUpMat;
-    [SerializeField]
-    private Material superMat;
+    private float invisibleTime = 2f; //투명하게 유지되는 시간
 
-    private Coroutine isWaiting;
-    void Start()
+    private Renderer rend;
+    private Coroutine invisibleRoutine;
+
+    void Awake()
     {
         rend = GetComponent<Renderer>();
     }
 
-    public void Lightup()
-    {
-        isLightUp = true;
-        UpdateMat();
-    }
-
+    //이미 투명한 동안에는 다시 불려도 무시한다.
     public void Invisible()
     {
-        if (isWaiting == null)
+        if (invisibleRoutine != null)
         {
-            isInvisible = true;
-            UpdateMat();
-            isWaiting = StartCoroutine(Wait());
+            return;
         }
+        invisibleRoutine = StartCoroutine(InvisibleRoutine());
     }
 
-    private void UpdateMat()
+    private IEnumerator InvisibleRoutine()
     {
-        Debug.Log("업데이트중 ");
-        if (isInvisible)
-        {
-            if (isLightUp)
-            {
-                rend.sharedMaterial = superMat;
-            }
-            else
-            {
-                rend.sharedMaterial = invisibleMat;
-            }
-        }
-        else
-        {
-            if (isLightUp)
-            {
-                rend.sharedMaterial = lightUpMat;
-            }
-            else
-            {
-                rend.sharedMaterial = defaultMat;
-            }
-        }
-    }
-    
-    private IEnumerator Wait()
-    {
-        yield return new WaitForSeconds(2.0f);
-        isInvisible = false;
-        UpdateMat();
-        isWaiting = null;
+        rend.sharedMaterial = invisibleMat;
+        yield return new WaitForSeconds(invisibleTime);
+        rend.sharedMaterial = defaultMat;
+        invisibleRoutine = null;
     }
 }

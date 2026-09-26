@@ -1,187 +1,140 @@
-using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngineInternal;
-using static UnityEngine.GraphicsBuffer;
-using static UnityEngine.UI.Image;
 
 public class SkyManager : MonoBehaviour
 {
     [Header("Sun")]
     [SerializeField]
-    private int sunRiseMaxCount;
+    private int sunRiseMaxCount = 20; //이 횟수만큼 불씨를 먹으면 클리어
     [SerializeField]
-    private float sunXRotationMin;
+    private float sunXRotationMin = 0f;
     [SerializeField]
-    private float sunXRotationMax;
+    private float sunXRotationMax = 15f;
     [SerializeField]
-    private float sunIntensityMin;
+    private float sunIntensityMin = 0.3f;
     [SerializeField]
-    private float sunIntensityMax;
+    private float sunIntensityMax = 1f;
     [Header("Sky")]
     [SerializeField]
-    private float skySunSizeMin;
+    private float skySunSizeMin = 0f;
     [SerializeField]
-    private float skySunSizeMax;
+    private float skySunSizeMax = 0.04f;
     [SerializeField]
-    private float skyExposureMin;
+    private float skyExposureMin = 1f;
     [SerializeField]
-    private float skyExposureMax;
+    private float skyExposureMax = 2f;
     [SerializeField]
-    private float skyAtmoThickMin;
+    private float skyAtmoThickMin = 0.75f;
     [SerializeField]
-    private float skyAtmoThickMax;
+    private float skyAtmoThickMax = 3f; //대기 두께는 Max에서 시작해서 Min으로 줄어든다.
     [Header("LightUp")]
     [SerializeField]
-    private float lightUpTime;
+    private float lightUpTime = 10f; //불씨 하나당 밝아지는 데 걸리는 시간
+
+    public System.Action OnGameClear;
+
     private Light sun;
     private Material sky;
-    private int currentSunRiseCount;
-    public System.Action OnGameClear;
-    private Coroutine sunRiseXRotationCoroutine;
-    private Coroutine sunRiseIntensityCoroutine;
-    private Coroutine sunRiseSunSizeCoroutine;
-    private Coroutine sunRiseExposureCoroutine;
-    private Coroutine sunRiseAtmoThickCoroutine;
+    private int lightUpCount;
+    private Coroutine sunRiseRoutine;
 
-    private float currentXRotation;
-    private float currentIntensity;
-    private float currentSunSize;
-    private float currentExposure;
-    private float currentAtmoThick;
+    //현재 값 (다음 보간의 시작점)
+    private float xRotation;
+    private float intensity;
+    private float sunSize;
+    private float exposure;
+    private float atmosphereThickness;
 
-    [ContextMenu("불키기")]
-    public void CityLightUp()
-    {
-        currentSunRiseCount++;
-        if (currentSunRiseCount <= sunRiseMaxCount)
-        {
-            float currentSunRiseRatio = (float)currentSunRiseCount / sunRiseMaxCount;
-            Debug.Log("city light up " + currentSunRiseRatio);
-
-            if (sunRiseXRotationCoroutine != null) StopCoroutine(sunRiseXRotationCoroutine);
-            sunRiseXRotationCoroutine = StartCoroutine(SunRiseXRotation(currentSunRiseRatio));
-
-            if (sunRiseIntensityCoroutine != null) StopCoroutine(sunRiseIntensityCoroutine);
-            sunRiseIntensityCoroutine = StartCoroutine(SunRiseIntensity(currentSunRiseRatio));
-
-            if (sunRiseSunSizeCoroutine != null) StopCoroutine(sunRiseSunSizeCoroutine);
-            sunRiseSunSizeCoroutine = StartCoroutine(SunRiseSunSize(currentSunRiseRatio));
-
-            if (sunRiseExposureCoroutine != null) StopCoroutine(sunRiseExposureCoroutine);
-            sunRiseExposureCoroutine = StartCoroutine(SunRiseExposure(currentSunRiseRatio));
-
-            if (sunRiseAtmoThickCoroutine != null) StopCoroutine(sunRiseAtmoThickCoroutine);
-            sunRiseAtmoThickCoroutine = StartCoroutine(sunRiseAtmoThick(currentSunRiseRatio));
-
-            if (currentSunRiseCount == sunRiseMaxCount)
-            {
-                StartCoroutine(GameClearCorutine());
-            }
-        }
-    }
     public void Initialize()
     {
         sun = GetComponent<Light>();
-        sky = new Material(RenderSettings.skybox);
+        sky = new Material(RenderSettings.skybox); //원본 스카이박스 에셋이 바뀌지 않도록 복제해서 쓴다.
         RenderSettings.skybox = sky;
-        currentSunRiseCount = 0;
+        lightUpCount = 0;
 
-        sky.SetFloat("_SunSize", skySunSizeMin);
-        sky.SetFloat("_Exposure", skyExposureMin);
-        sky.SetFloat("_AtmosphereThickness", skyAtmoThickMax);
-        transform.rotation = Quaternion.Euler(sunXRotationMin, 0, 0);
-        sun.intensity = sunIntensityMin;
-
-        currentSunSize = skySunSizeMin;
-        currentExposure = skyExposureMin;
-        currentXRotation = sunXRotationMin;
-        currentIntensity = sunIntensityMin;
-        currentAtmoThick = skyAtmoThickMax;
+        xRotation = sunXRotationMin;
+        intensity = sunIntensityMin;
+        sunSize = skySunSizeMin;
+        exposure = skyExposureMin;
+        atmosphereThickness = skyAtmoThickMax;
+        ApplySky();
     }
 
-    private IEnumerator SunRiseXRotation(float currentSunRiseRatio)
+    //ArrowController.OnLightUp에 연결된다.
+    [ContextMenu("불키기")]
+    public void CityLightUp()
     {
-        float target = (sunXRotationMax -  sunXRotationMin) * currentSunRiseRatio + sunIntensityMin;
-        float count = 0f;
-        float start = currentXRotation;
-        while (count < lightUpTime)
+        lightUpCount++;
+        if (lightUpCount > sunRiseMaxCount)
         {
-            count += Time.deltaTime;
-            currentXRotation = Mathf.Lerp(start, target, count / lightUpTime);
-            transform.rotation = Quaternion.Euler(currentXRotation, 0, 0);
+            return;
+        }
+
+        float ratio = (float)lightUpCount / sunRiseMaxCount;
+        if (sunRiseRoutine != null)
+        {
+            StopCoroutine(sunRiseRoutine);
+        }
+        sunRiseRoutine = StartCoroutine(SunRiseRoutine(ratio));
+
+        if (lightUpCount == sunRiseMaxCount)
+        {
+            StartCoroutine(GameClearRoutine());
+        }
+    }
+
+    //ratio(0~1)에 해당하는 하늘까지 lightUpTime 동안 보간
+    private IEnumerator SunRiseRoutine(float ratio)
+    {
+        float startXRotation = xRotation;
+        float startIntensity = intensity;
+        float startSunSize = sunSize;
+        float startExposure = exposure;
+        float startAtmosphereThickness = atmosphereThickness;
+
+        float targetXRotation = Mathf.Lerp(sunXRotationMin, sunXRotationMax, ratio);
+        float targetIntensity = Mathf.Lerp(sunIntensityMin, sunIntensityMax, ratio);
+        float targetSunSize = Mathf.Lerp(skySunSizeMin, skySunSizeMax, ratio);
+        float targetExposure = Mathf.Lerp(skyExposureMin, skyExposureMax, ratio);
+        float targetAtmosphereThickness = Mathf.Lerp(skyAtmoThickMax, skyAtmoThickMin, ratio);
+
+        float elapsed = 0f;
+        while (elapsed < lightUpTime)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / lightUpTime;
+            xRotation = Mathf.Lerp(startXRotation, targetXRotation, t);
+            intensity = Mathf.Lerp(startIntensity, targetIntensity, t);
+            sunSize = Mathf.Lerp(startSunSize, targetSunSize, t);
+            exposure = Mathf.Lerp(startExposure, targetExposure, t);
+            atmosphereThickness = Mathf.Lerp(startAtmosphereThickness, targetAtmosphereThickness, t);
+            ApplySky();
             yield return null;
         }
-        currentXRotation = target;
-        transform.rotation = Quaternion.Euler(currentXRotation, 0, 0);
+
+        xRotation = targetXRotation;
+        intensity = targetIntensity;
+        sunSize = targetSunSize;
+        exposure = targetExposure;
+        atmosphereThickness = targetAtmosphereThickness;
+        ApplySky();
+        sunRiseRoutine = null;
     }
 
-    private IEnumerator SunRiseIntensity(float currentSunRiseRatio)
+    //현재 값을 태양 빛과 스카이박스에 적용
+    private void ApplySky()
     {
-        float target = (sunIntensityMax - sunIntensityMin) * currentSunRiseRatio + sunIntensityMin;
-        float count = 0f;
-        float start = currentIntensity;
-        while (count < lightUpTime)
-        {
-            count += Time.deltaTime;
-            currentIntensity = Mathf.Lerp(start, target, count / lightUpTime);
-            sun.intensity = currentIntensity; 
-            yield return null;
-        }
-        currentIntensity = target;
-        sun.intensity = currentIntensity; 
-
-    }
-    private IEnumerator SunRiseSunSize(float currentSunRiseRatio)
-    {
-        float target = (skySunSizeMax - skySunSizeMin) * currentSunRiseRatio + skySunSizeMin;
-        float count = 0f;
-        float start = currentSunSize;
-        while (count < lightUpTime)
-        {
-            count += Time.deltaTime;
-            currentSunSize = Mathf.Lerp(start, target, count / lightUpTime);
-            sky.SetFloat("_SunSize", currentSunSize);
-            yield return null;
-        }
-        currentSunSize = target;
-        sky.SetFloat("_SunSize", currentSunSize);
-    }
-    private IEnumerator SunRiseExposure(float currentSunRiseRatio)
-    {
-        float target = (skyExposureMax - skyExposureMin) * currentSunRiseRatio + skyExposureMin;
-        float count = 0f;
-        float start = currentExposure;
-        while (count < lightUpTime)
-        {
-            count += Time.deltaTime;
-            currentExposure = Mathf.Lerp(start, target, count / lightUpTime);
-            sky.SetFloat("_Exposure", currentExposure);
-            yield return null;
-        }
-        currentExposure = target;
-        sky.SetFloat("_Exposure", currentExposure);
-    }
-    private IEnumerator sunRiseAtmoThick(float currentSunRiseRatio)
-    {
-        float target = (skyAtmoThickMin - skyAtmoThickMax) * currentSunRiseRatio + skyAtmoThickMax;
-        float count = 0f;
-        float start = currentAtmoThick;
-        while (count < lightUpTime)
-        {
-            count += Time.deltaTime;
-            currentAtmoThick = Mathf.Lerp(start, target, count / lightUpTime);
-            sky.SetFloat("_AtmosphereThickness", currentAtmoThick);
-            yield return null;
-        }
-        currentAtmoThick = target;
-        sky.SetFloat("_AtmosphereThickness", currentAtmoThick);
+        transform.rotation = Quaternion.Euler(xRotation, 0, 0);
+        sun.intensity = intensity;
+        sky.SetFloat("_SunSize", sunSize);
+        sky.SetFloat("_Exposure", exposure);
+        sky.SetFloat("_AtmosphereThickness", atmosphereThickness);
     }
 
-    private IEnumerator GameClearCorutine()
+    //마지막으로 밝아지는 연출이 끝난 뒤 클리어
+    private IEnumerator GameClearRoutine()
     {
         yield return new WaitForSeconds(lightUpTime);
-        OnGameClear.Invoke();
+        OnGameClear?.Invoke();
     }
 }

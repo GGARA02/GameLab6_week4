@@ -8,7 +8,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private ArrowController arrowController;
     [SerializeField]
-    private ArrowCamera arrowCamera;
+    private VoulmeManager arrowCamera;
     [SerializeField]
     private GameObject endCamera;
     [SerializeField]

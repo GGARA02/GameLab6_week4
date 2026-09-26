@@ -644,8 +644,8 @@ MonoBehaviour:
       Size: {x: 0.8, y: 0.8}
       Offset: {x: 0, y: 0}
   CenterOnActivate: 1
-  TargetOffset: {x: 0, y: 0, z: 0}
-  Damping: {x: 0.5, y: 0.5}
+  TargetOffset: {x: 0, y: 3, z: 0}
+  Damping: {x: 10, y: 10}
   Lookahead:
     Enabled: 0
     Time: 0
@@ -671,7 +671,7 @@ MonoBehaviour:
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
   OrbitStyle: 0
-  Radius: 10
+  Radius: 30
   Orbits:
     Top:
       Radius: 2
@@ -765,8 +765,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 751460494}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.15212339, y: 2.5947793e-15, z: 8.570879e-17, w: 0.98836154}
-  m_LocalPosition: {x: 0, y: 7.007058, z: -9.537169}
+  m_LocalRotation: {x: 0.10352378, y: -4.8947434e-23, z: -5.0486896e-23, w: 0.994627}
+  m_LocalPosition: {x: 0, y: 13.021174, z: -28.61151}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1250,8 +1250,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 953801986}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.15212339, y: 2.6712524e-15, z: -4.1114513e-16, w: 0.98836154}
-  m_LocalPosition: {x: 0, y: 7.007058, z: -9.537169}
+  m_LocalRotation: {x: 0.10352379, y: -5.479588e-23, z: 5.7033216e-24, w: 0.994627}
+  m_LocalPosition: {x: 0, y: 13.021174, z: -28.61151}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1578,9 +1578,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraManager
   defaultFov:
     fov: 30
-    duration: 0.3
+    duration: 1
   dashFov:
-    fov: 20
+    fov: 40
     duration: 0.4
   hyperDashFov:
     fov: 50
@@ -2639,6 +2639,14 @@ PrefabInstance:
     - target: {fileID: 481257680780498238, guid: 1b7b6debe8c6d0e44aa9e2271cf87f3f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3728062179043641716, guid: 1b7b6debe8c6d0e44aa9e2271cf87f3f, type: 3}
+      propertyPath: accel
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 3728062179043641716, guid: 1b7b6debe8c6d0e44aa9e2271cf87f3f, type: 3}
+      propertyPath: decel
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 3728062179043641716, guid: 1b7b6debe8c6d0e44aa9e2271cf87f3f, type: 3}
       propertyPath: sunPoint

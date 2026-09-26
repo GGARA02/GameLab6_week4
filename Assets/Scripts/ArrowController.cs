@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -12,11 +13,16 @@ public enum ArrowState
 public class ArrowController : MonoBehaviour
 {
     //TODO : 쉐이더 그래프로 깜빡임 효과
+    //TODO : currentSpeed는 최대 속도 제한으로 한다. 가속은 벡터 투영으로, 감속은 벡터의 반대방향으로?
     [Header("Default")]
     [SerializeField]
     private float speed;
     [SerializeField]
     private float invincibleTime; //벽 피격 후 무적 시간
+    [SerializeField]
+    private float accel; //가속 변수
+    [SerializeField]
+    private float decel; //감속 변수
     [Header("Dash")]
     [SerializeField]
     private float dashSpeed;
@@ -68,6 +74,9 @@ public class ArrowController : MonoBehaviour
     public System.Action<ArrowState> OnArrowStateChange; //카메라에서 상태별 연출을 위한 이벤트
     public System.Action OnLightUp; //불씨를 밝히자
     public System.Action OnGameOver;
+
+
+    private Vector3 velocity = Vector3.zero;
 
     private void Update()
     {
@@ -263,10 +272,9 @@ public class ArrowController : MonoBehaviour
         trailRangeRatio = Mathf.Clamp(trailRangeRatio, 0.33f, 0.66f);
 
         //카메라가 보는 방향 기준 WASD 이동, 바닥과 벽은 CharacterController가 콜라이더로 막는다.
-        Vector2 moveInput = input.Move.normalized;
-        Vector3 move = (brainTransform.forward * moveInput.y + brainTransform.right * moveInput.x)
-                       * Time.deltaTime * currentSpeed * trailRangeRatio;
-        characterController.Move(move);
+        UpdateVelocity(currentSpeed * trailRangeRatio);
+        characterController.Move(velocity * Time.deltaTime);
+        velocity = characterController.velocity; //벽에 막힌 만큼 속도에도 반영
 
         trail.time = remainBulletTime; //남은 게이지만큼 트레일 길이
 
@@ -276,5 +284,26 @@ public class ArrowController : MonoBehaviour
             particle.Stop(true, ParticleSystemStopBehavior.StopEmitting);
             GameOver();
         }
+    }
+    private void UpdateVelocity(float maxSpeed)
+    {
+        Vector2 moveInput = input.Move;
+        Vector3 moveDir = brainTransform.forward * moveInput.y + brainTransform.right * moveInput.x;
+
+        //입력이 없으면 마찰처럼 감속
+        if (moveDir.sqrMagnitude < 0.0001f)
+        {
+            velocity = Vector3.MoveTowards(velocity, Vector3.zero, decel * Time.deltaTime);
+            return;
+        }
+        moveDir.Normalize();
+
+        Vector3 along = Vector3.Project(velocity, moveDir);        //입력 방향 성분
+        Vector3 side = Vector3.ProjectOnPlane(velocity, moveDir); //옆 성분
+
+        side = Vector3.MoveTowards(side, Vector3.zero, decel * Time.deltaTime);         //브레이크
+        along = Vector3.MoveTowards(along, moveDir * maxSpeed, accel * Time.deltaTime);  //엑셀
+
+        velocity = along + side;
     }
 }

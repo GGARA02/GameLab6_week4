@@ -9,6 +9,7 @@ public class InputManager : MonoBehaviour
     public Vector2 Move => inputActions?.Player.Move.ReadValue<Vector2>() ?? Vector2.zero;
     public bool BulletTimePressed => inputActions?.Player.BulletTime.WasPressedThisFrame() ?? false;
     public bool BulletTimeReleased => inputActions?.Player.BulletTime.WasReleasedThisFrame() ?? false;
+    public bool BoostPressed => inputActions?.Player.Boost.WasPressedThisFrame() ?? false;
 
     //System
     public bool InteractPressed => inputActions?.System.Interact.WasPressedThisFrame() ?? false;

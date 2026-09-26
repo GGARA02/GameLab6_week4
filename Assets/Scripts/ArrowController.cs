@@ -58,6 +58,11 @@ public class ArrowController : MonoBehaviour
     private TrailRenderer trail;
     [SerializeField]
     private ParticleSystem particle;
+    [Header("Boost")]
+    [SerializeField]
+    private int startBoostCount = 1;
+    [SerializeField]
+    private float boostCoolTime = 3.0f;
 
     private ArrowState arrowState;
     private float currentSpeed;
@@ -77,6 +82,10 @@ public class ArrowController : MonoBehaviour
 
 
     private Vector3 velocity = Vector3.zero;
+
+    private int maxBoostCount;
+    private int currentBoostCount;
+    private float remainBoostCoolTime;
 
     private void Update()
     {
@@ -159,6 +168,9 @@ public class ArrowController : MonoBehaviour
         arrowState = ArrowState.None;
         brainTransform = FindFirstObjectByType<CinemachineBrain>().transform;
         characterController = GetComponent<CharacterController>();
+        maxBoostCount = startBoostCount;
+        currentBoostCount = startBoostCount;
+        remainBoostCoolTime = boostCoolTime;
     }
 
     public void inputInit(InputManager inputManager)
@@ -202,11 +214,33 @@ public class ArrowController : MonoBehaviour
                 currentSpeed = bulletTimeSpeed;
                 Time.timeScale = bulletTimeScale;
             }
+            else if (input.BoostPressed && currentBoostCount > 0)
+            {
+                //current 부스트 감소 
+                currentBoostCount--;
+                remainBoostCoolTime = boostCoolTime;
+                //대시 전환
+                ChangeArrowState(ArrowState.Dash);
+                Time.timeScale = 1;
+                currentSpeed = dashSpeed;
+                remainCoolTime = dashCoolTime;
+            }
             //바로 위에서 넣은 bulletTimeSpeed를 덮어쓴다. (불릿타임 속도가 적용되지 않음)
-            currentSpeed = speed;
+            //currentSpeed = speed;
         }
         else if (arrowState == ArrowState.Dash)
         {
+            if (input.BoostPressed && currentBoostCount > 0)
+            {
+                //current 부스트 감소 
+                currentBoostCount--;
+                remainBoostCoolTime = boostCoolTime;
+                //대시 전환
+                ChangeArrowState(ArrowState.HyperDash);
+                Time.timeScale = 1;
+                currentSpeed = hyperDashSpeed;
+                remainCoolTime = hyperDashCoolTime;
+            }
             //대시 시간이 끝나면 기본 상태로
             if (remainCoolTime <= 0)
             {
@@ -284,6 +318,27 @@ public class ArrowController : MonoBehaviour
             particle.Stop(true, ParticleSystemStopBehavior.StopEmitting);
             GameOver();
         }
+
+        //부스트 사용 채워 주기
+        if (remainBoostCoolTime > 0)
+        {
+            remainBoostCoolTime -= Time.deltaTime;
+            if (remainBoostCoolTime <= 0.01)
+            {
+                if (currentBoostCount < maxBoostCount)
+                {
+                    currentBoostCount++;
+                }
+                if (currentBoostCount == maxBoostCount)
+                {
+                    remainBoostCoolTime = 0f;
+                }
+                else
+                {
+                    remainBoostCoolTime = boostCoolTime;
+                }
+            }
+        }
     }
     private void UpdateVelocity(float maxSpeed)
     {
@@ -305,5 +360,12 @@ public class ArrowController : MonoBehaviour
         along = Vector3.MoveTowards(along, moveDir * maxSpeed, accel * Time.deltaTime);  //엑셀
 
         velocity = along + side;
+    }
+
+    public void boostCountUp()
+    {
+        maxBoostCount++;
+        currentBoostCount = maxBoostCount;
+        remainBoostCoolTime = 0f;
     }
 }

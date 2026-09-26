@@ -107,3 +107,6 @@ InitTestScene*.unity*
 Assets/Unity.VisualScripting.Generated/VisualScripting.Core.meta
 Assets/Unity.VisualScripting.Generated/VisualScripting.Core/AotStubs.cs
 Assets/Unity.VisualScripting.Generated/VisualScripting.Core/AotStubs.cs.meta
+
+# VS Code
+.vscode

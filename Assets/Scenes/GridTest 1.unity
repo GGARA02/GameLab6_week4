@@ -2640,6 +2640,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3728062179043641716, guid: 1b7b6debe8c6d0e44aa9e2271cf87f3f, type: 3}
+      propertyPath: emberGainEffect
+      value: 
+      objectReference: {fileID: 7564711585179036571, guid: c08a496ec96f10345abcf22da72a7fa8, type: 3}
     - target: {fileID: 8397657499604025662, guid: 1b7b6debe8c6d0e44aa9e2271cf87f3f, type: 3}
       propertyPath: m_Name
       value: Arrow

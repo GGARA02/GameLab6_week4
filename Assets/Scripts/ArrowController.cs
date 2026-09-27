@@ -63,6 +63,8 @@ public class ArrowController : MonoBehaviour
     private int startBoostCount = 1;
     [SerializeField]
     private float boostCoolTime = 3.0f;
+    [SerializeField]
+    private GameObject emberGainEffect;
 
     private ArrowState arrowState;
     private float currentSpeed;
@@ -136,6 +138,9 @@ public class ArrowController : MonoBehaviour
         if (hit.collider.CompareTag("Ember"))
         {
             OnLightUp?.Invoke();
+            //불씨 획득 이펙트 생성
+            GameObject obj = Instantiate(emberGainEffect, transform.position, Quaternion.identity);
+            obj.GetComponent<ParticleAttractor>().SetTarget(transform);
 
             //불씨를 먹으면 대시, 대시 중에 또 먹으면 하이퍼대시
             if (arrowState == ArrowState.None)

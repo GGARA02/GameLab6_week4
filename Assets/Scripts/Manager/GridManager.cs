@@ -16,7 +16,7 @@ public class GridManager : MonoBehaviour
     [SerializeField, FormerlySerializedAs("startPrefabs")]
     private GameObject startPrefab; //가운데 시작 블록
 
-    private const int GridSize = 15;
+    private const int GridSize = 11;
     private const int LastIndex = GridSize - 1;
     private const int CenterIndex = GridSize / 2;
     private const float CellSize = 100f;

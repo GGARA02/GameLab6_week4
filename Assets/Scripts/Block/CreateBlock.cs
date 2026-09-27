@@ -31,15 +31,15 @@ public class CreateBlock : MonoBehaviour
 
     private readonly List<Vector3> occupiedPositions = new List<Vector3>(); //이미 배치된 위치 (높이 무시)
 
-    void Start()
-    {
-        //불씨를 먼저 놓고, 건물은 불씨를 피해서 놓는다.
-        if (Random.Range(0, 100) < emberRatio)
-        {
-            CreateEmber();
-        }
-        CreateBuildings();
-    }
+    // void Start()
+    // {
+    //     //불씨를 먼저 놓고, 건물은 불씨를 피해서 놓는다.
+    //     if (Random.Range(0, 100) < emberRatio)
+    //     {
+    //         CreateEmber();
+    //     }
+    //     CreateBuildings();
+    // }
 
     [ContextMenu("블럭 생성")]
     public void CreateBuildings()

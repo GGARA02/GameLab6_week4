@@ -5466,6 +5466,7 @@ MonoBehaviour:
   bulletTimeDiscount: 0.001
   bulletTimeDuringDiscount: 60
   bulletTimeLightUp: 0.1
+  gainPerSecond: 0.05
   bulletWallHit: 0.06
   difficultSpeedUp: 0
   trail: {fileID: 2697299557148188994}

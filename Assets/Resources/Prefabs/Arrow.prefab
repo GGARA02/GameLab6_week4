@@ -5280,13 +5280,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6573115798686000130}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: -0, z: 0.49636754, w: -0.8681125}
   m_LocalPosition: {x: 0, y: 0, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3172887699716036197}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -419.52}
 --- !u!1 &8175325380555236755
 GameObject:
   m_ObjectHideFlags: 0
@@ -5471,7 +5471,7 @@ MonoBehaviour:
   difficultSpeedUp: 0
   trail: {fileID: 2697299557148188994}
   particle: {fileID: 7994600138975757343}
-  startBoostCount: 1
+  startBoostCount: 0
   boostCoolTime: 3
   emberGainEffect: {fileID: 7564711585179036571, guid: c08a496ec96f10345abcf22da72a7fa8, type: 3}
 --- !u!54 &7629208501570794682

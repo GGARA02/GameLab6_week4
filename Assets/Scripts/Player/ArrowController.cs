@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Runtime.InteropServices;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -49,6 +50,9 @@ public class ArrowController : MonoBehaviour
     [SerializeField]
     private float bulletTimeLightUp; //불씨 획득 시 회복량
     [SerializeField]
+    private float gainPerSecond = 1f; //불씨 획득 시 최대 초당 회복량
+    public float BulletTimeLightUp => bulletTimeLightUp;
+    [SerializeField]
     private float bulletWallHit; //벽 피격 시 감소량
     [Header("Difficult")]
     [SerializeField]
@@ -82,12 +86,14 @@ public class ArrowController : MonoBehaviour
     public System.Action OnLightUp; //불씨를 밝히자
     public System.Action OnGameOver;
 
+    public System.Action<int> OnBoostUpdate;
 
     private Vector3 velocity = Vector3.zero;
 
     private int maxBoostCount;
     private int currentBoostCount;
     private float remainBoostCoolTime;
+    private float pendingGain = 0;
 
     private void Update()
     {
@@ -158,8 +164,8 @@ public class ArrowController : MonoBehaviour
                 remainCoolTime = hyperDashCoolTime;
             }
 
-            remainBulletTime += bulletTimeLightUp;
-            remainBulletTime = Mathf.Clamp(remainBulletTime, 0f, maxBulletTime);
+            //remainBulletTime += bulletTimeLightUp;
+            //remainBulletTime = Mathf.Clamp(remainBulletTime, 0f, maxBulletTime);
             Destroy(hit.gameObject);
         }
     }
@@ -176,6 +182,7 @@ public class ArrowController : MonoBehaviour
         maxBoostCount = startBoostCount;
         currentBoostCount = startBoostCount;
         remainBoostCoolTime = boostCoolTime;
+        OnBoostUpdate?.Invoke(currentBoostCount);
     }
 
     public void inputInit(InputManager inputManager)
@@ -223,6 +230,7 @@ public class ArrowController : MonoBehaviour
             {
                 //current 부스트 감소 
                 currentBoostCount--;
+                OnBoostUpdate?.Invoke(currentBoostCount);
                 remainBoostCoolTime = boostCoolTime;
                 //대시 전환
                 ChangeArrowState(ArrowState.Dash);
@@ -239,6 +247,7 @@ public class ArrowController : MonoBehaviour
             {
                 //current 부스트 감소 
                 currentBoostCount--;
+                OnBoostUpdate?.Invoke(currentBoostCount);
                 remainBoostCoolTime = boostCoolTime;
                 //대시 전환
                 ChangeArrowState(ArrowState.HyperDash);
@@ -324,6 +333,13 @@ public class ArrowController : MonoBehaviour
             GameOver();
         }
 
+        if (pendingGain > 0f)
+        {
+            float step = Mathf.Min(pendingGain, gainPerSecond * Time.deltaTime);
+            pendingGain -= step;
+            remainBulletTime = Mathf.Min(remainBulletTime + step, maxBulletTime);
+        }
+
         //부스트 사용 채워 주기
         if (remainBoostCoolTime > 0)
         {
@@ -333,6 +349,7 @@ public class ArrowController : MonoBehaviour
                 if (currentBoostCount < maxBoostCount)
                 {
                     currentBoostCount++;
+                    OnBoostUpdate?.Invoke(currentBoostCount);
                 }
                 if (currentBoostCount == maxBoostCount)
                 {
@@ -367,10 +384,17 @@ public class ArrowController : MonoBehaviour
         velocity = along + side;
     }
 
+    [ContextMenu("부스트 개수 증가")]
     public void boostCountUp()
     {
         maxBoostCount++;
         currentBoostCount = maxBoostCount;
+        OnBoostUpdate?.Invoke(currentBoostCount);
         remainBoostCoolTime = 0f;
+    }
+
+    public void remainBulletTimeGain(float gain)
+    {
+        pendingGain += gain;
     }
 }

@@ -9,11 +9,16 @@ public class ParticleAttractor : MonoBehaviour
     private ParticleSystem ps;
     private ParticleSystem.Particle[] particles;
     private float timer = 0;
+    private ArrowController ac;
+    private float particleGain;
 
     void Awake()
     {
         ps = GetComponent<ParticleSystem>();
         particles = new ParticleSystem.Particle[ps.main.maxParticles];
+        ac = FindAnyObjectByType<ArrowController>();
+        ParticleSystem.Burst burst = ps.emission.GetBurst(0);
+        particleGain = ac.BulletTimeLightUp / burst.count.constant;
     }
 
 
@@ -31,6 +36,7 @@ public class ParticleAttractor : MonoBehaviour
 
                 if (Vector3.Distance(particles[i].position, targetPos) < 0.3f)
                 {
+                    ac.remainBulletTimeGain(particleGain);
                     particles[i].remainingLifetime = 0f;
                     if (numParticlesAlive < 5f)
                     {

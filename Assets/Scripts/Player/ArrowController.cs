@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -105,12 +106,15 @@ public class ArrowController : MonoBehaviour
     private float remainBoostCoolTime;
     private float pendingGain = 0;
 
+    private HashSet<Collider> hitThisFarme = new();
+
     private void Update()
     {
         if (isActive)
         {
             HandleStateLogic();
             Move();
+            hitThisFarme.Clear();
         }
     }
 
@@ -179,6 +183,8 @@ public class ArrowController : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
+        if (!hitThisFarme.Add(hit.collider))
+            return;
         if (hit.collider.CompareTag("Ember"))
         {
             OnLightUp?.Invoke();

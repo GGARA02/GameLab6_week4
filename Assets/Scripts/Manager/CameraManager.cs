@@ -46,6 +46,8 @@ public class CameraManager : MonoBehaviour
         _cameraOrders.Sort((a, b) => a.order.CompareTo(b.order));
         _cameraOrders[_PovIndex].SetFov(_defaultFov.fov);
 
+        _currentCamera = _cameraOrders[_PovIndex];
+
         _brain = FindAnyObjectByType<CinemachineBrain>();
     }
 
@@ -67,10 +69,8 @@ public class CameraManager : MonoBehaviour
         // currentCam의 priority = 10
         // _cameraOrders[index].priority = 0;
 
-
-
-        _cameraOrders[index].SetPriority(_currentCamPriority);
         _currentCamera.SetPriority(_otherCamPriority);
+        _cameraOrders[index].SetPriority(_currentCamPriority);
 
         _currentCamera = _cameraOrders[index];
     }

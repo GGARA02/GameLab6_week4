@@ -15,6 +15,8 @@ public class ArrowController : MonoBehaviour
 {
     //TODO : 쉐이더 그래프로 깜빡임 효과
     //TODO : currentSpeed는 최대 속도 제한으로 한다. 가속은 벡터 투영으로, 감속은 벡터의 반대방향으로?
+    [SerializeField]
+    private SmallArrowSpiralMove wispTail;
     [Header("Default")]
     [SerializeField]
     private float speed;
@@ -73,6 +75,7 @@ public class ArrowController : MonoBehaviour
     [SerializeField]
     private float envAccel;
 
+
     private ArrowState arrowState;
     private float currentSpeed;
     private float remainCoolTime; //남은 쿨타임은 조작불가능 시간과 동일하다.
@@ -90,6 +93,7 @@ public class ArrowController : MonoBehaviour
     public System.Action OnGameOver;
 
     public System.Action<int> OnBoostUpdate;
+
 
     private Vector3 moveVelocity = Vector3.zero;
     private Vector3 envVelocity = Vector3.zero;
@@ -152,6 +156,11 @@ public class ArrowController : MonoBehaviour
             WindSetting windSetting = other.GetComponent<WindArea>().Wind;
             desiredEnvVelocity += windSetting.dir * windSetting.speed;
         }
+        else if (other.CompareTag("DarkArea"))
+        {
+            TorchTrigger torchTrigger = other.GetComponent<TorchTrigger>();
+            torchTrigger.Enter(this);
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -160,6 +169,11 @@ public class ArrowController : MonoBehaviour
         {
             WindSetting windSetting = other.GetComponent<WindArea>().Wind;
             desiredEnvVelocity -= windSetting.dir * windSetting.speed;
+        }
+        else if (other.CompareTag("DarkArea"))
+        {
+            TorchTrigger torchTrigger = other.GetComponent<TorchTrigger>();
+            torchTrigger.Exit();
         }
     }
 
@@ -430,5 +444,27 @@ public class ArrowController : MonoBehaviour
     public void remainBulletTimeGain(float gain)
     {
         pendingGain += gain;
+    }
+
+    public bool TryLendWisp(out Pose from)
+    {
+        from = default;
+        if (!isActive || currentBoostCount <= 0)
+            return false;
+
+        from = wispTail.GetArrowPose(currentBoostCount - 1); //이번에 꺼질 마지막 꼬리
+        currentBoostCount--;
+        maxBoostCount--;
+        OnBoostUpdate?.Invoke(currentBoostCount);            //여기서 그 꼬리가 SetActive(false)
+        return true;
+    }
+
+    public void ReturnWisps(int count)
+    {
+        if (count <= 0)
+            return;
+        maxBoostCount += count;
+        currentBoostCount += count;
+        OnBoostUpdate?.Invoke(currentBoostCount);
     }
 }

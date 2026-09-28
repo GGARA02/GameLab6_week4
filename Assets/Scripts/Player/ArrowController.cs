@@ -168,6 +168,11 @@ public class ArrowController : MonoBehaviour
             //remainBulletTime = Mathf.Clamp(remainBulletTime, 0f, maxBulletTime);
             Destroy(hit.gameObject);
         }
+        else if (hit.collider.CompareTag("Wisp"))
+        {
+            boostCountUp();
+            Destroy(hit.gameObject);
+        }
     }
 
     public void Initialize()
@@ -390,6 +395,7 @@ public class ArrowController : MonoBehaviour
         maxBoostCount++;
         currentBoostCount = maxBoostCount;
         OnBoostUpdate?.Invoke(currentBoostCount);
+        Debug.Log(maxBoostCount);
         remainBoostCoolTime = 0f;
     }
 

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Wall
   - Ember
+  - Wisp
   layers:
   - Default
   - TransparentFX

@@ -27,6 +27,7 @@ public class TorchTrigger : MonoBehaviour
     private void Awake()
     {
         targetProbe = GetComponent<ReflectionProbe>();
+        targetProbe.RenderProbe();
         assigned = new bool[torchLights.Length];
     }
 
@@ -107,13 +108,14 @@ public class TorchTrigger : MonoBehaviour
     {
         torchLights[i].SetActive(true);
         litCount++;
-        if (litCount == torchLights.Length)
+        if (litCount >= torchLights.Length)
             SetCaveLight(true);
     }
 
     private void SetCaveLight(bool on)
     {
-        targetProbe.intensity = on ? 1f : 0f;
+        targetProbe.intensity = on ? 3f : 0f;
+        targetProbe.RenderProbe();
         OnCaveLightChanged?.Invoke(on);
     }
 }

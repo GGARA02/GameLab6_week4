@@ -31,12 +31,13 @@ public class CameraManager : MonoBehaviour
 
     //0번 카메라가 플레이어를 따라가는 POV 카메라다
     private const int _PovIndex = 0;
-    private const int _currentCamPriority = 0;
-    private const int _otherCamPriority = 10;
+    private const int _currentCamPriority = 10;
+    private const int _otherCamPriority = 0;
 
     private CinemachineBrain _brain;
     private CameraOrder _currentCamera;
 
+    [SerializeField]
     private List<CameraOrder> _cameraOrders; //order 오름차순, 인덱스 = order
 
     public void Initialize()

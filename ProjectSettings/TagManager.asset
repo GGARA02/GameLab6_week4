@@ -7,6 +7,7 @@ TagManager:
   - Wall
   - Ember
   - Wisp
+  - WindArea
   layers:
   - Default
   - TransparentFX

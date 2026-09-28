@@ -90950,7 +90950,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraOrder
   order: 0
-  defaultPriority: 1
+  defaultPriority: 10
 --- !u!1 &751854393
 GameObject:
   m_ObjectHideFlags: 0
@@ -115551,7 +115551,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  CustomBlends: {fileID: 0}
+  CustomBlends: {fileID: 11400000, guid: 3e971c1ffd5819b4e8f3d0bdb6373c44, type: 2}
 --- !u!114 &953801988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121790,6 +121790,7 @@ MonoBehaviour:
   _cameraOrder: {fileID: 2016877615}
   _cameraManager: {fileID: 1153847952}
   _camChangeTime: 3
+  _povCam: {fileID: 751460499}
 --- !u!1 &1004211710
 GameObject:
   m_ObjectHideFlags: 0
@@ -141885,6 +141886,7 @@ MonoBehaviour:
   _bulletTimeFov:
     fov: 25
     duration: 0.1
+  _cameraOrders: []
 --- !u!1 &1154166273
 GameObject:
   m_ObjectHideFlags: 0
@@ -249229,7 +249231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraOrder
   order: 1
-  defaultPriority: 10
+  defaultPriority: 0
 --- !u!1 &2017749440
 GameObject:
   m_ObjectHideFlags: 0

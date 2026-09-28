@@ -249104,6 +249104,7 @@ GameObject:
   - component: {fileID: 2016877613}
   - component: {fileID: 2016877612}
   - component: {fileID: 2016877611}
+  - component: {fileID: 2016877616}
   - component: {fileID: 2016877615}
   m_Layer: 0
   m_Name: BackGroundFollowCam
@@ -249232,6 +249233,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraOrder
   order: 1
   defaultPriority: 0
+--- !u!114 &2016877616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016877610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0544e7b14d134a1449e61175446cfb95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineRecomposer
+  ApplyAfter: 3
+  Tilt: 10
+  Pan: 13
+  Dutch: 0
+  ZoomScale: 1
+  FollowAttachment: 1
+  LookAtAttachment: 1
 --- !u!1 &2017749440
 GameObject:
   m_ObjectHideFlags: 0

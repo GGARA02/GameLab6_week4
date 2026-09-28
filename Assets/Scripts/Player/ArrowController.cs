@@ -27,6 +27,8 @@ public class ArrowController : MonoBehaviour
     private float accel; //가속 변수
     [SerializeField]
     private float decel; //감속 변수
+    [SerializeField]
+    private float verticalRatio = 0.2f;
     [Header("Dash")]
     [SerializeField]
     private float dashSpeed;
@@ -419,7 +421,14 @@ public class ArrowController : MonoBehaviour
     {
         Vector2 moveInput = input.Move;
         Vector3 moveDir = brainTransform.forward * moveInput.y + brainTransform.right * moveInput.x;
-
+        if (input.UpPressing && !input.DownPressing)
+        {
+            moveDir += brainTransform.up * input.UpInput * verticalRatio;
+        }
+        else if (!input.UpPressing && input.DownPressing)
+        {
+            moveDir -= brainTransform.up * input.DownInput * verticalRatio;
+        }
         //입력이 없으면 마찰처럼 감속
         if (moveDir.sqrMagnitude < 0.0001f)
         {

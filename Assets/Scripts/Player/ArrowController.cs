@@ -69,6 +69,9 @@ public class ArrowController : MonoBehaviour
     private float boostCoolTime = 3.0f;
     [SerializeField]
     private GameObject emberGainEffect;
+    [Header("Env")]
+    [SerializeField]
+    private float envAccel;
 
     private ArrowState arrowState;
     private float currentSpeed;
@@ -88,6 +91,9 @@ public class ArrowController : MonoBehaviour
 
     public System.Action<int> OnBoostUpdate;
 
+    private Vector3 moveVelocity = Vector3.zero;
+    private Vector3 envVelocity = Vector3.zero;
+    private Vector3 desiredEnvVelocity = Vector3.zero;
     private Vector3 velocity = Vector3.zero;
 
     private int maxBoostCount;
@@ -138,6 +144,24 @@ public class ArrowController : MonoBehaviour
     //        Destroy(other.gameObject);
     //    }
     //}
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("WindArea"))
+        {
+            WindSetting windSetting = other.GetComponent<WindArea>().Wind;
+            desiredEnvVelocity += windSetting.dir * windSetting.speed;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("WindArea"))
+        {
+            WindSetting windSetting = other.GetComponent<WindArea>().Wind;
+            desiredEnvVelocity -= windSetting.dir * windSetting.speed;
+        }
+    }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -326,8 +350,12 @@ public class ArrowController : MonoBehaviour
 
         //카메라가 보는 방향 기준 WASD 이동, 바닥과 벽은 CharacterController가 콜라이더로 막는다.
         UpdateVelocity(currentSpeed * trailRangeRatio);
+        envVelocity = Vector3.MoveTowards(envVelocity, desiredEnvVelocity, envAccel * Time.deltaTime);
+        velocity = envVelocity + moveVelocity;
+        //이제 여기서 환경 값을 더해준 것으로 움직인다.
         characterController.Move(velocity * Time.deltaTime);
         velocity = characterController.velocity; //벽에 막힌 만큼 속도에도 반영
+        //moveVelocity = characterController.velocity - envVelocity; // 벽에 막힌 만큼 입력 속도에서 제거
 
         trail.time = remainBulletTime; //남은 게이지만큼 트레일 길이
 
@@ -375,18 +403,18 @@ public class ArrowController : MonoBehaviour
         //입력이 없으면 마찰처럼 감속
         if (moveDir.sqrMagnitude < 0.0001f)
         {
-            velocity = Vector3.MoveTowards(velocity, Vector3.zero, decel * Time.deltaTime);
+            moveVelocity = Vector3.MoveTowards(moveVelocity, Vector3.zero, decel * Time.deltaTime);
             return;
         }
         moveDir.Normalize();
 
-        Vector3 along = Vector3.Project(velocity, moveDir);        //입력 방향 성분
-        Vector3 side = Vector3.ProjectOnPlane(velocity, moveDir); //옆 성분
+        Vector3 along = Vector3.Project(moveVelocity, moveDir);        //입력 방향 성분
+        Vector3 side = Vector3.ProjectOnPlane(moveVelocity, moveDir); //옆 성분
 
         side = Vector3.MoveTowards(side, Vector3.zero, decel * Time.deltaTime);         //브레이크
         along = Vector3.MoveTowards(along, moveDir * maxSpeed, accel * Time.deltaTime);  //엑셀
 
-        velocity = along + side;
+        moveVelocity = along + side;
     }
 
     [ContextMenu("부스트 개수 증가")]

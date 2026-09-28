@@ -44,6 +44,7 @@ public class CameraControlArea : MonoBehaviour
 
             if (_areaCameraActive)
             {
+                Debug.Log("놓쳤다");
                 _cameraManager.SetCamera(0);
                 _areaCameraActive = false;
             }
@@ -72,6 +73,7 @@ public class CameraControlArea : MonoBehaviour
             yield break;
 
         _cameraManager.SetCamera(_cameraOrder.order);
+        Debug.Log("잡았다");
         _areaCameraActive = true;
     }
 

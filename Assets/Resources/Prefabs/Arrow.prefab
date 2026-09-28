@@ -5511,6 +5511,7 @@ MonoBehaviour:
   startBoostCount: 0
   boostCoolTime: 3
   emberGainEffect: {fileID: 7564711585179036571, guid: c08a496ec96f10345abcf22da72a7fa8, type: 3}
+  envAccel: 50
 --- !u!54 &7629208501570794682
 Rigidbody:
   m_ObjectHideFlags: 0

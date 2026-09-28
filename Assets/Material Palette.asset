@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f1ca63a91b17724bbd99c8fa67e0180, type: 3}
+  m_Name: Material Palette
+  m_EditorClassIdentifier: Unity.ProBuilder.Editor::UnityEditor.ProBuilder.MaterialPalette
+  array:
+  - {fileID: 2100000, guid: 1b68675483ff9834b8d6dd2b49acddd0, type: 2}
+  - {fileID: 2100000, guid: ec5fd1aeb92b7d94196c2b3089918511, type: 2}
+  - {fileID: 2100000, guid: 512e0d3c3b93958468e739ef0d419162, type: 2}
+  - {fileID: 2100000, guid: f8c7e8c6a29df5943b4be7af5b452c11, type: 2}
+  - {fileID: 2100000, guid: 4fe9ed01a0d63d94eafb7f265a2fb4d8, type: 2}
+  - {fileID: 2100000, guid: 132e19cb8b81b0c44aeb7ee45057a93e, type: 2}
+  - {fileID: 2100000, guid: 3389934beee053d488fc321b2e16dfa5, type: 2}
+  - {fileID: 2100000, guid: 23214002d96a9c046bbbd0dc6fdea470, type: 2}
+  - {fileID: 2100000, guid: c937cd5bee60aa346aaf82b8e987e024, type: 2}
+  - {fileID: 2100000, guid: b0fe3a9b37927af488bcf7831ee1d760, type: 2}
+  - {fileID: 2100000, guid: 3f14e19bb6975604990dca275862d35d, type: 2}
+  - {fileID: 2100000, guid: e81ae4e53d160ff4488ad6bf49cd77fe, type: 2}
+  - {fileID: 2100000, guid: 19c3952fd3736a142afef0b9328e5701, type: 2}
+  - {fileID: 2100000, guid: e66f879da793be74dae6c17c70d1d353, type: 2}
+  - {fileID: 2100000, guid: 2810d55bf785d87428dfda28e52648a2, type: 2}
+  - {fileID: 2100000, guid: a732fa51faa8e12448b85653cf6e22c0, type: 2}
+  - {fileID: 2100000, guid: 6348050aa1406ff48b309ca565d87d1a, type: 2}
+  - {fileID: 2100000, guid: 219ee78e81ed69243987896c146114c1, type: 2}
+  - {fileID: 2100000, guid: ed9763c1fdfa84d40ac76d6482984f42, type: 2}
+  - {fileID: 2100000, guid: 44ab721ae000b484fb8fe5ea8a7e99c0, type: 2}
+  - {fileID: 2100000, guid: 7aa4b35a8992e3a48a9e84a62aed24d0, type: 2}
+  - {fileID: 2100000, guid: 1852c8aa6cb53f8459976ed09f8cfeb6, type: 2}

@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,88 +8,126 @@ public class SmallArrowSpiralMove : MonoBehaviour
     [SerializeField]
     private GameObject smallArrow;
     [SerializeField]
-    private float radius = 1;
+    private float length = 1f;
     [SerializeField]
-    private float speed = 100;
+    private float maxLengthRatio = 2.0f;
+    [SerializeField]
+    private float maxVelocity = 5.0f;
+    [SerializeField]
+    private int poolCount = 10;
     [SerializeField]
     private float rotationSmoothSpeed = 10f;
     [SerializeField]
-    private int poolCount = 10;
+    private float smoothTime = 0.1f;
+    [SerializeField]
+    private float smoothTimeStep = 0.05f;
+    [SerializeField]
+    private AnimationCurve yCurve;
+    [SerializeField]
+    private float height;
+    [SerializeField]
+    private float frequency;
+    [SerializeField]
+    private int wispFrequency;
+
+    private Vector3 offset;
+
     private CharacterController cc;
-    private Transform child;
+    private List<GameObject> smallArrows = new List<GameObject>();
+    private List<Vector3> velocities = new List<Vector3>();
     private Vector3 moveDirc = Vector3.forward;
-    private List<GameObject> smallArrows;
+    private int activeCount;
+    private float currentLength;
 
     void Awake()
     {
         cc = player.GetComponent<CharacterController>();
-
-        child = transform.Find("SmallArrowHolder");
+        currentLength = length;
         player.OnBoostUpdate += BoostCountUpdate;
-
-        smallArrows = new List<GameObject>();
+        offset = transform.localPosition;
         for (int i = 0; i < poolCount; i++)
-        {
-            GameObject instance = Instantiate(smallArrow, child.transform);
-            instance.SetActive(false);
-            smallArrows.Add(instance);
-        }
+            AddArrow(); ;
     }
 
     void Start()
     {
-        if (player != null)
-        {
-            transform.position = player.transform.position;
-        }
+        transform.position = player.transform.position + offset;
     }
 
-    void Update()
+    void LateUpdate()
     {
         FollowPlayer();
+        UpdateArrows();
+    }
 
-        child.Rotate(Vector3.forward * speed * Time.deltaTime);
+    private void AddArrow()
+    {
+        GameObject instance = Instantiate(smallArrow);
+        instance.SetActive(false);
+        smallArrows.Add(instance);
+        velocities.Add(Vector3.zero);
     }
 
     private void FollowPlayer()
     {
-        Vector3 targetPos = player.transform.position;
+        transform.position = player.transform.position + offset;
 
-        transform.position = Vector3.Lerp(transform.position, targetPos, 10f * Time.deltaTime);
+        Vector3 flatVel = Vector3.ProjectOnPlane(cc.velocity, Vector3.up);
+        if (flatVel.sqrMagnitude > 0.001f)
+            moveDirc = flatVel.normalized;
 
-        if (cc.velocity.sqrMagnitude > 0.001f)
+        float t = Mathf.InverseLerp(0f, maxVelocity, cc.velocity.magnitude);
+        currentLength = length * Mathf.Lerp(1f, maxLengthRatio, t);
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveDirc), rotationSmoothSpeed * Time.deltaTime);
+    }
+
+    private Vector3 GetTarget(int i)
+    {
+        float t = Time.time * frequency + (float)i / wispFrequency;
+        float y = yCurve.Evaluate(t) * height;
+        return transform.TransformPoint(new Vector3(0f, y, -(i + 1) * currentLength));
+    }
+
+    private void UpdateArrows()
+    {
+        for (int i = 0; i < activeCount; i++)
         {
-            moveDirc = cc.velocity.normalized;
+            Transform tr = smallArrows[i].transform;
+
+            Vector3 v = velocities[i];
+            tr.position = Vector3.SmoothDamp(tr.position, GetTarget(i), ref v, smoothTime + i * smoothTimeStep);
+            velocities[i] = v;
+
+            tr.rotation = Quaternion.Slerp(tr.rotation, transform.rotation, rotationSmoothSpeed * Time.deltaTime);
         }
-
-        Quaternion lookDirc = Quaternion.LookRotation(moveDirc);
-
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookDirc, rotationSmoothSpeed * Time.deltaTime);
     }
 
     private void BoostCountUpdate(int currentBoostCount)
     {
-        currentBoostCount = Mathf.Max(0, currentBoostCount);
+        activeCount = Mathf.Max(0, currentBoostCount);
 
-        // 풀이 모자라면 추가 생성
-        while (smallArrows.Count < currentBoostCount)
-        {
-            GameObject instance = Instantiate(smallArrow, child);
-            instance.SetActive(false);
-            smallArrows.Add(instance);
-        }
-
-        float theta = currentBoostCount > 0 ? 360f / currentBoostCount : 0f;
+        while (smallArrows.Count < activeCount)
+            AddArrow();
 
         for (int i = 0; i < smallArrows.Count; i++)
         {
-            bool active = i < currentBoostCount;
-            smallArrows[i].SetActive(active);
-            if (!active) continue;
+            GameObject arrow = smallArrows[i];
+            bool active = i < activeCount;
 
-            float rad = theta * i * Mathf.Deg2Rad;
-            smallArrows[i].transform.localPosition = new Vector3(Mathf.Sin(rad), Mathf.Cos(rad), 0f) * radius;
-            smallArrows[i].transform.localRotation = Quaternion.identity;
+            if (active && !arrow.activeSelf)
+            {
+                arrow.transform.SetPositionAndRotation(GetTarget(i), transform.rotation);
+                velocities[i] = Vector3.zero;
+            }
+
+            arrow.SetActive(active);
         }
+    }
+
+    public Pose GetArrowPose(int index)
+    {
+        Transform tr = smallArrows[index].transform;
+        return new Pose(tr.position, tr.rotation);
     }
 }

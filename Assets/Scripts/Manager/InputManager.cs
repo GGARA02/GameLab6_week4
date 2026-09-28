@@ -10,6 +10,11 @@ public class InputManager : MonoBehaviour
     public bool BulletTimePressed => inputActions?.Player.BulletTime.WasPressedThisFrame() ?? false;
     public bool BulletTimeReleased => inputActions?.Player.BulletTime.WasReleasedThisFrame() ?? false;
     public bool BoostPressed => inputActions?.Player.Boost.WasPressedThisFrame() ?? false;
+    public bool UpPressing => inputActions?.Player.Up.IsPressed() ?? false;
+    public bool DownPressing => inputActions?.Player.Down.IsPressed() ?? false;
+    public float UpInput => inputActions?.Player.Up.ReadValue<float>() ?? 0f;
+    public float DownInput => inputActions?.Player.Down.ReadValue<float>() ?? 0f;
+
 
     //System
     public bool InteractPressed => inputActions?.System.Interact.WasPressedThisFrame() ?? false;

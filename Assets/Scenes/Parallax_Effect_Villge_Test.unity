@@ -73917,6 +73917,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 513987069}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &515077120 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2335249927441278431, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+  m_PrefabInstance: {fileID: 1141912084}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &515077123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 515077120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3fc7e1576d308748b39e622820de3db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NocturneAbyssWhaleDeath
+  onStepComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &515175260
 GameObject:
   m_ObjectHideFlags: 0
@@ -171220,6 +171240,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7768128622241699942, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: whaleDeath
+      value: 
+      objectReference: {fileID: 515077123}
+    - target: {fileID: 7768128622241699942, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
       propertyPath: 'points.Array.data[0]'
       value: 
       objectReference: {fileID: 2048497806}
@@ -171234,7 +171258,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2335249927441278431, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 515077123}
   m_SourcePrefab: {fileID: 100100000, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
 --- !u!1 &1141960008
 GameObject:
@@ -328638,8 +328665,8 @@ SceneRoots:
   - {fileID: 1269752641}
   - {fileID: 878485760}
   - {fileID: 1582699782}
-  - {fileID: 1141912084}
   - {fileID: 531769525}
+  - {fileID: 1141912084}
   - {fileID: 1385552587}
   - {fileID: 2058553133}
   - {fileID: 2048497806}

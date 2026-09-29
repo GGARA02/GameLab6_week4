@@ -98,8 +98,6 @@ public class NocturneAbyssWhaleController : MonoBehaviour
     }
     public void StartSequence()
     {
-        // "첫 번째 배열의 고래를 SetActive한다는 말에서 나옴"
-
         if(isRunning) return; // 이미 실행중이면 무시
         if(whaleSteps.Length == 0) return; // 배열이 비어있으면 무시
 

@@ -611,4 +611,11 @@ public class ArrowController : MonoBehaviour
         if (characterController != null)
             characterController.enabled = true;
     }
+
+    public void CutChunsik()
+    {
+        maxBoostCount = 0;
+        currentBoostCount = 0;
+        OnBoostUpdate?.Invoke(currentBoostCount);
+    }
 }

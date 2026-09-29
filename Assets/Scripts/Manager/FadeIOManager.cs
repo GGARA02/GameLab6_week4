@@ -16,6 +16,7 @@ public class FadeIOManager : MonoBehaviour
     {
         arrow = FindFirstObjectByType<ArrowController>();
         cc = arrow.gameObject.GetComponent<CharacterController>();
+        cam = FindFirstObjectByType<CameraManager>();
     }
 
 
@@ -27,10 +28,11 @@ public class FadeIOManager : MonoBehaviour
 
     private IEnumerator FadeOutCoroutine(GameObject panel)
     {
+        arrow.CutChunsik();
         arrow.isCutscene = true;
         sky.CityLightDown();
         panel.SetActive(true);
-        cam.SetCamera(0);
+
         Image image = panel.GetComponent<Image>();
         Color fadeColor = image.color;
         fadeColor.a = 0;
@@ -49,7 +51,7 @@ public class FadeIOManager : MonoBehaviour
 
         Vector3 pos = new Vector3(0, -1800, 4100);
         arrow.ResetMovementState(pos);
-
+        cam.SetCamera(0);
         Physics.SyncTransforms();
 
         yield return new WaitForSeconds(fadeTime);

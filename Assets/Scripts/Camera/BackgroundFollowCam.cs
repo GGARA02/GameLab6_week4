@@ -5,10 +5,10 @@ using UnityEngine;
 public class BackgroundFollowCam : MonoBehaviour
 {
     [Header("카메라")]
-    [SerializeField] private CameraOrder _cameraOrder;   // 백그라운드 카메라
+    [SerializeField] private CameraOrder _cameraOrder;
     [SerializeField] private CinemachineCamera _povCam;
-    [SerializeField] private CinemachineTargetGroup _group; // 비워두면 백그라운드 카메라의 Look At Target에서 찾음
-    [SerializeField] private Transform _target;          // 각도 판정 + 그룹 멤버 (런타임에 SetTarget으로 지정 가능)
+    [SerializeField] private CinemachineTargetGroup _group;
+    [SerializeField] private Transform _target;
 
     [Header("전환")]
     [SerializeField] private float _camChangeTime = 3f;
@@ -27,7 +27,7 @@ public class BackgroundFollowCam : MonoBehaviour
     private CameraManager _cameraManager;
     private CinemachineOrbitalFollow _orbitalFollow;
     private Transform _player;
-    private CinemachineTargetGroup.Target _targetMember; // 타겟이 아직 없으면 null
+    private CinemachineTargetGroup.Target _targetMember; // 타겟이 없어도 됨(토치용)
     private Collider _collider;
     private TorchTrigger _torchTrigger;
 
@@ -44,7 +44,7 @@ public class BackgroundFollowCam : MonoBehaviour
         _orbitalFollow = _cameraOrder.GetComponent<CinemachineOrbitalFollow>();
 
         // LookAt 프로퍼티는 Custom 토글이 꺼져 있으면 TrackingTarget(플레이어)을 돌려주므로
-        // Target 구조체의 필드를 직접 읽는다
+        // Target 구조체의 필드를 직접 읽어야함 (LookAt 으로 읽지 말 것)
         _player = backgroundCam.Target.TrackingTarget;
         if (_group == null && backgroundCam.Target.LookAtTarget != null)
             _group = backgroundCam.Target.LookAtTarget.GetComponent<CinemachineTargetGroup>();
@@ -65,22 +65,14 @@ public class BackgroundFollowCam : MonoBehaviour
             _torchTrigger.OnFirstWispLaunched += SetTarget;
     }
 
-    void OnDestroy()
-    {
-        if (_torchTrigger != null)
-            _torchTrigger.OnFirstWispLaunched -= SetTarget;
-    }
-
     public void SetTarget(Transform target)
     {
-        // Start 전이면 저장만 해두고 Start에서 등록
         if (_group == null)
         {
             _target = target;
             return;
         }
 
-        // 이전 타겟 멤버 정리
         if (_targetMember != null && _targetMember.Object != target)
         {
             _group.Targets.Remove(_targetMember);
@@ -93,7 +85,7 @@ public class BackgroundFollowCam : MonoBehaviour
 
         _targetMember = GetOrAddMember(_group, _target, _targetWeightRange.y);
 
-        // 타겟이 사라져서 꺼졌던 콜라이더 복구 (다시 켜지면 OnTriggerEnter가 다시 호출됨)
+        // 타겟이 사라져서 꺼졌던 콜라이더 복구 
         if (_collider != null)
             _collider.enabled = true;
     }
@@ -150,7 +142,6 @@ public class BackgroundFollowCam : MonoBehaviour
         _areaCameraActive = false;
 
         // TorchTrigger가 타겟을 아직 생성하지 않은 경우만 대기
-        // (플레이어가 안에 있는 상태를 유지해야 타겟이 생기자마자 반응함)
         if (_torchTrigger != null && _targetMember == null)
             return;
 

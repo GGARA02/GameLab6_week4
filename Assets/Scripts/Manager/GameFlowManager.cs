@@ -76,7 +76,7 @@ public class GameFlowManager : MonoBehaviour
         Cursor.visible = false;
         arrowController.GameStart();
         volumeManager.GameStart();
-        startUICoru = StartCoroutine(GameStartUICorutine());
+        // startUICoru = StartCoroutine(GameStartUICorutine());
     }
 
     private void GameOver()

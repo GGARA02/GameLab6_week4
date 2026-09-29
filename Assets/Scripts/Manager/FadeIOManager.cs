@@ -7,27 +7,18 @@ public class FadeIOManager : MonoBehaviour
     [SerializeField] private GameObject whitePanel;
     [SerializeField] private GameObject blackPanel;
     [SerializeField] private float fadeTime = 2;
-    void Start()
+    private ArrowController arrow;
+    private CharacterController cc;
+    void Awake()
     {
-
+        arrow = FindFirstObjectByType<ArrowController>();
+        cc = arrow.gameObject.GetComponent<CharacterController>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
 
-    }
-
-    public void StartFadeIO(bool isBlack)
+    public void StartFadeIO()
     {
-        if (isBlack)
-        {
-            StartCoroutine(FadeOutCoroutine(blackPanel));
-        }
-        else
-        {
-            StartCoroutine(FadeOutCoroutine(whitePanel));
-        }
+        StartCoroutine(FadeOutCoroutine(blackPanel));
 
     }
 
@@ -46,7 +37,10 @@ public class FadeIOManager : MonoBehaviour
             image.color = fadeColor;
             yield return null;
         }
+        Vector3 pos = new Vector3(0, -1800, 4100);
+        arrow.gameObject.transform.position = pos;
         yield return new WaitForSeconds(fadeTime);
+        cc.Move(Vector3.down);
         fadeTimeElapsed = 0;
         while (fadeTimeElapsed < fadeTime * 2)
         {
@@ -56,6 +50,7 @@ public class FadeIOManager : MonoBehaviour
             yield return null;
 
         }
+        cc.Move(Vector3.zero);
         panel.SetActive(false);
     }
 }

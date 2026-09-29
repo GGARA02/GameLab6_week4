@@ -7,6 +7,8 @@ public class CameraControlArea : MonoBehaviour
     [SerializeField] private CameraOrder _cameraOrder;
     [SerializeField] private CameraManager _cameraManager;
     [SerializeField] private float _camChangeTime = 3f;
+    [SerializeField] private float _camCancleAngle = 90f;
+
     private CharacterController controller;
 
     private Coroutine _camChangeCoroutine;
@@ -24,8 +26,8 @@ public class CameraControlArea : MonoBehaviour
     private bool CanChangeCamera()
     {
         return controller != null
-            //&& controller.velocity.sqrMagnitude < 0.0025f // ¼Óµµ 0.05 ¹Ì¸¸
-            && GetLookAtAngle() <= 90f;
+            //&& controller.velocity.sqrMagnitude < 0.0025f // ì†ë„ 0.05 ë¯¸ë§Œ
+            && GetLookAtAngle() <= _camCancleAngle;
     }
 
     private void OnTriggerStay(Collider other)
@@ -44,6 +46,7 @@ public class CameraControlArea : MonoBehaviour
 
             if (_areaCameraActive)
             {
+                Debug.Log("ë†“ì³¤ë‹¤");
                 _cameraManager.SetCamera(0);
                 _areaCameraActive = false;
             }
@@ -67,11 +70,12 @@ public class CameraControlArea : MonoBehaviour
         yield return new WaitForSeconds(_camChangeTime);
         _camChangeCoroutine = null;
 
-        // ´ë±â Á¾·á ½ÃÁ¡¿¡µµ Á¶°ÇÀ» ¸¸Á·ÇÏ´ÂÁö È®ÀÎ
+        // ëŒ€ê¸° ì¢…ë£Œ ì‹œì ì—ë„ ì¡°ê±´ì„ ë§Œì¡±í•˜ëŠ”ì§€ í™•ì¸
         if (!CanChangeCamera())
             yield break;
 
         _cameraManager.SetCamera(_cameraOrder.order);
+        Debug.Log("ìž¡ì•˜ë‹¤");
         _areaCameraActive = true;
     }
 
@@ -88,7 +92,7 @@ public class CameraControlArea : MonoBehaviour
 
     private float GetLookAtAngle()
     {
-        // °è»êÇÒ ¼ö ¾øÀ¸¸é <= 90 Á¶°ÇÀ» Åë°úÇÏÁö ¾Êµµ·Ï Ã³¸®
+        // ê³„ì‚°í•  ìˆ˜ ì—†ìœ¼ë©´ <= 90 ì¡°ê±´ì„ í†µê³¼í•˜ì§€ ì•Šë„ë¡ ì²˜ë¦¬
         if (_cameraOrder == null || _povCam == null)
             return 180f;
 
@@ -105,7 +109,7 @@ public class CameraControlArea : MonoBehaviour
 
         Vector3 forward = povTransform.forward;
 
-        // ³ôÀÌ Â÷ÀÌ¸¦ Á¦¿ÜÇÑ ¼öÆò °¢µµ °è»ê
+        // ë†’ì´ ì°¨ì´ë¥¼ ì œì™¸í•œ ìˆ˜í‰ ê°ë„ ê³„ì‚°
         toTarget = Vector3.ProjectOnPlane(toTarget, Vector3.up);
         forward = Vector3.ProjectOnPlane(forward, Vector3.up);
 

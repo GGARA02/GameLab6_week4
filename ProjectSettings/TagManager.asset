@@ -9,6 +9,7 @@ TagManager:
   - Wisp
   - WindArea
   - DarkArea
+  - Drop
   layers:
   - Default
   - TransparentFX

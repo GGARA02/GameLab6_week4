@@ -10,6 +10,7 @@ TagManager:
   - WindArea
   - DarkArea
   - Drop
+  - Enemy
   layers:
   - Default
   - TransparentFX

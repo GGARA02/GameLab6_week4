@@ -50,6 +50,7 @@ public class GameFlowManager : MonoBehaviour
         arrowController.OnGameOver += GameOver;
         arrowController.OnRealeasePressed += skyManager.RealeaseLight;
         skyManager.OnGameClear += GameClear;
+        skyManager.OnRealeaseFire += arrowController.remainBulletTimeGain;
 
         GameStart();
     }

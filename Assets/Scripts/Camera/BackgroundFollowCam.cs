@@ -5,9 +5,10 @@ using UnityEngine;
 public class BackgroundFollowCam : MonoBehaviour
 {
     [Header("카메라")]
-    [SerializeField] private CameraOrder _cameraOrder;   // 백그라운드 카메라
+    [SerializeField] private CameraOrder _cameraOrder;
     [SerializeField] private CinemachineCamera _povCam;
-    [SerializeField] private Transform _target;          // 각도 판정 + 그룹 멤버
+    [SerializeField] private CinemachineTargetGroup _group;
+    [SerializeField] private Transform _target;
 
     [Header("전환")]
     [SerializeField] private float _camChangeTime = 3f;
@@ -18,12 +19,17 @@ public class BackgroundFollowCam : MonoBehaviour
     [SerializeField] private Vector2 _targetWeightRange = new Vector2(0f, 0.15f);
     [SerializeField] private Vector2 _orbitRadiusRange = new Vector2(5f, 100f);
 
+    [Header("Target이 사라졌을 때 콜라이더 끄기")]
+    [SerializeField] private bool isColliderOff = true;
+
     private const float _memberRadius = 0.5f;
 
     private CameraManager _cameraManager;
     private CinemachineOrbitalFollow _orbitalFollow;
     private Transform _player;
-    private CinemachineTargetGroup.Target _targetMember;
+    private CinemachineTargetGroup.Target _targetMember; // 타겟이 없어도 됨(토치용)
+    private Collider _collider;
+    private TorchTrigger _torchTrigger;
 
     private CharacterController controller;
     private Coroutine _camChangeCoroutine;
@@ -32,16 +38,56 @@ public class BackgroundFollowCam : MonoBehaviour
     void Start()
     {
         _cameraManager = FindFirstObjectByType<CameraManager>();
+        _collider = GetComponent<Collider>();
 
-        // 백그라운드 카메라 설정에서 필요한 것들을 꺼내온다
         CinemachineCamera backgroundCam = _cameraOrder.GetComponent<CinemachineCamera>();
         _orbitalFollow = _cameraOrder.GetComponent<CinemachineOrbitalFollow>();
-        _player = backgroundCam.Follow;
 
-        CinemachineTargetGroup group = backgroundCam.LookAt.GetComponent<CinemachineTargetGroup>();
-        GetOrAddMember(group, _player, 1f);
-        _targetMember = GetOrAddMember(group, _target, _targetWeightRange.y);
+        // LookAt 프로퍼티는 Custom 토글이 꺼져 있으면 TrackingTarget(플레이어)을 돌려주므로
+        // Target 구조체의 필드를 직접 읽어야함 (LookAt 으로 읽지 말 것)
+        _player = backgroundCam.Target.TrackingTarget;
+        if (_group == null && backgroundCam.Target.LookAtTarget != null)
+            _group = backgroundCam.Target.LookAtTarget.GetComponent<CinemachineTargetGroup>();
+
+        if (_group == null)
+        {
+            return;
+        }
+
+        GetOrAddMember(_group, _player, 1f);
         _orbitalFollow.Radius = _orbitRadiusRange.y;
+
+        // 인스펙터에 지정했거나 Start 전에 SetTarget이 불린 경우 등록
+        if (_target != null)
+            SetTarget(_target);
+
+        if (TryGetComponent(out _torchTrigger))
+            _torchTrigger.OnFirstWispLaunched += SetTarget;
+    }
+
+    public void SetTarget(Transform target)
+    {
+        if (_group == null)
+        {
+            _target = target;
+            return;
+        }
+
+        if (_targetMember != null && _targetMember.Object != target)
+        {
+            _group.Targets.Remove(_targetMember);
+            _targetMember = null;
+        }
+
+        _target = target;
+        if (_target == null)
+            return;
+
+        _targetMember = GetOrAddMember(_group, _target, _targetWeightRange.y);
+
+        // 타겟이 사라져서 꺼졌던 콜라이더 복구 
+        if (_collider != null)
+            _collider.enabled = true;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -51,32 +97,17 @@ public class BackgroundFollowCam : MonoBehaviour
 
         if (other.TryGetComponent<CharacterController>(out var found))
             controller = found;
-
-
-
-    }
-
-    private bool CanChangeCamera()
-    {
-        return controller != null
-            && GetLookAtAngle() <= _camCancleAngle;
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (controller == null || other != controller)
+        if (_group == null || controller == null || other != controller)
             return;
 
+        // 타겟이 아직 생성되지 않았거나 파괴됨
         if (_target == null)
         {
-            CancelTimer();
-            if (_areaCameraActive)
-                _cameraManager.SetCamera(0);
-
-            _areaCameraActive = false;
-            controller = null;
-            _targetMember.Weight = 0f;
-            GetComponent<Collider>().enabled = false;
+            HandleNoTarget();
             return;
         }
 
@@ -97,10 +128,34 @@ public class BackgroundFollowCam : MonoBehaviour
 
             if (_areaCameraActive)
             {
-                Debug.Log("놓쳤다");
                 _cameraManager.SetCamera(0);
                 _areaCameraActive = false;
             }
+        }
+    }
+
+    private void HandleNoTarget()
+    {
+        CancelTimer();
+        if (_areaCameraActive)
+            _cameraManager.SetCamera(0);
+        _areaCameraActive = false;
+
+        // TorchTrigger가 타겟을 아직 생성하지 않은 경우만 대기
+        if (_torchTrigger != null && _targetMember == null)
+            return;
+
+        // 그 외(TorchTrigger 없음, 또는 있던 타겟이 파괴됨): 원래 동작
+        if (_targetMember != null)
+        {
+            _group.Targets.Remove(_targetMember);
+            _targetMember = null;
+        }
+
+        if (isColliderOff && _collider != null)
+        {
+            controller = null;
+            _collider.enabled = false;
         }
     }
 
@@ -116,17 +171,21 @@ public class BackgroundFollowCam : MonoBehaviour
         controller = null;
     }
 
+    private bool CanChangeCamera()
+    {
+        return controller != null
+            && GetLookAtAngle() <= _camCancleAngle;
+    }
+
     private IEnumerator SetCamTimer()
     {
         yield return new WaitForSeconds(_camChangeTime);
         _camChangeCoroutine = null;
 
-        // 대기 종료 시점에도 조건을 만족하는지 확인
         if (!CanChangeCamera())
             yield break;
 
         _cameraManager.SetCamera(_cameraOrder.order);
-        Debug.Log("잡았다");
         _areaCameraActive = true;
     }
 
@@ -142,13 +201,11 @@ public class BackgroundFollowCam : MonoBehaviour
     // POV 카메라 정면과 실제 타겟 방향 사이의 수평 각도
     private float GetLookAtAngle()
     {
-        // 계산할 수 없으면 조건을 통과하지 않도록 처리
         if (_povCam == null || _target == null)
             return 180f;
 
         Transform povTransform = _povCam.transform;
 
-        // 높이 차이를 제외한 수평 각도 계산
         Vector3 toTarget = Vector3.ProjectOnPlane(_target.position - povTransform.position, Vector3.up);
         Vector3 forward = Vector3.ProjectOnPlane(povTransform.forward, Vector3.up);
 

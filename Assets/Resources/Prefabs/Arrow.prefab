@@ -5495,7 +5495,7 @@ MonoBehaviour:
   invincibleTime: 2
   accel: 500
   decel: 300
-  verticalRatio: 0.2
+  verticalRatio: 0.4
   dashSpeed: 180
   dashCoolTime: 1.5
   hyperDashSpeed: 225

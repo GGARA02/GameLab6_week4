@@ -19,6 +19,8 @@ public class GameFlowManager : MonoBehaviour
     private SkyManager skyManager;
     [SerializeField]
     private GridManager gridManager;
+    [SerializeField]
+    private FadeIOManager fadeIOmanager;
     [Header("UI")]
     [SerializeField]
     public List<TextMeshProUGUI> startUIs; //시작 시 순서대로 보여줄 안내 문구

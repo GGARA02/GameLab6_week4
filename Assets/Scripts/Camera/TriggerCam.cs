@@ -15,12 +15,18 @@ public class TriggerCam : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
+        {
             cameraManager.SetCamera(cam.order);
+            Debug.Log("진입?");
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
+        {
             cameraManager.SetCamera(0);
+            Debug.Log("전환?");
+        }
     }
 }

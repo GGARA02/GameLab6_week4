@@ -48,6 +48,7 @@ public class GameFlowManager : MonoBehaviour
         arrowController.OnLightUp += skyManager.CityLightUp;
         arrowController.OnHitWall += volumeManager.HitWall;
         arrowController.OnGameOver += GameOver;
+        arrowController.OnRealeasePressed += skyManager.RealeaseLight;
         skyManager.OnGameClear += GameClear;
 
         GameStart();

@@ -30,6 +30,11 @@ public class SkyManager : MonoBehaviour
     [Header("LightUp")]
     [SerializeField]
     private float lightUpTime = 10f; //불씨 하나당 밝아지는 데 걸리는 시간
+    [Header("Realease Effect")]
+    [SerializeField]
+    private GameObject realeaseEffect;
+    [SerializeField]
+    private Transform villageTransform;
 
     public System.Action OnGameClear;
 
@@ -44,6 +49,7 @@ public class SkyManager : MonoBehaviour
     private float sunSize;
     private float exposure;
     private float atmosphereThickness;
+    private bool isReleasing = false;
 
     public void Initialize()
     {
@@ -81,6 +87,28 @@ public class SkyManager : MonoBehaviour
         {
             StartCoroutine(GameClearRoutine());
         }
+    }
+
+    public void RealeaseLight(Transform transform)
+    {
+        if (!isReleasing)
+        {
+            isReleasing = true;
+            StartCoroutine(RealeaseLightRoutine(transform));
+        }
+    }
+
+    private IEnumerator RealeaseLightRoutine(Transform transform)
+    {
+        WaitForSeconds sec = new WaitForSeconds(0.5f);
+        for (int i = 0; i < lightUpCount; i++)
+        {
+            GameObject particle = Instantiate(realeaseEffect, transform.position, Quaternion.identity);
+            ParticleAttractor pa = particle.GetComponent<ParticleAttractor>();
+            pa.SetTarget(villageTransform, false);
+            yield return sec;
+        }
+        isReleasing = false;
     }
 
     //ratio(0~1)에 해당하는 하늘까지 lightUpTime 동안 보간

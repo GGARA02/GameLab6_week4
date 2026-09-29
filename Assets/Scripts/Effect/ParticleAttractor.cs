@@ -1,16 +1,20 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ParticleAttractor : MonoBehaviour
 {
     [SerializeField] private float delayTime = 1;
-    [SerializeField] private float speed = 50f;
-    [SerializeField] private Transform playerTransform;
+    [SerializeField] public float speed = 50f;
+    [SerializeField] private Transform targetTransform;
 
     private ParticleSystem ps;
     private ParticleSystem.Particle[] particles;
     private float timer = 0;
     private ArrowController ac;
     private float particleGain;
+    private Dictionary<uint, Vector3> fixedTargetPositions = new Dictionary<uint, Vector3>();
+
+    public bool isTargetPlayer = true;
 
     void Awake()
     {
@@ -25,28 +29,45 @@ public class ParticleAttractor : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
-        if (timer > delayTime)
+        if (timer <= delayTime) return;
+        int numParticlesAlive = ps.GetParticles(particles);
+        if (numParticlesAlive == 0) return;
+
+        for (int i = 0; i < numParticlesAlive; i++)
         {
-            int numParticlesAlive = ps.GetParticles(particles);
-            Vector3 targetPos = playerTransform.position;
-
-            for (int i = 0; i < numParticlesAlive; i++)
+            Vector3 currentTarget;
+            if (isTargetPlayer)
             {
-                particles[i].position = Vector3.MoveTowards(particles[i].position, targetPos, speed * Time.deltaTime);
-
-                if (Vector3.Distance(particles[i].position, targetPos) < 0.3f)
-                {
-                    ac.remainBulletTimeGain(particleGain);
-                    particles[i].remainingLifetime = 0f;
-                    if (numParticlesAlive < 5f)
-                    {
-                        Destroy(gameObject, 5f);
-                    }
-
-                }
+                currentTarget = targetTransform.position;
             }
-            ps.SetParticles(particles, numParticlesAlive);
+            else
+            {
+                uint seed = particles[i].randomSeed;
+                if (!fixedTargetPositions.TryGetValue(seed, out currentTarget))
+                {
+                    currentTarget = targetTransform.position;
+                    currentTarget.x += Random.Range(-750, 7500);
+                    currentTarget.z += Random.Range(-1500, 1500);
+                    fixedTargetPositions[seed] = currentTarget;
+                }
+                speed = 750;
+            }
+            particles[i].position = Vector3.MoveTowards(particles[i].position, currentTarget, speed * Time.deltaTime);
+
+            if (Vector3.Distance(particles[i].position, currentTarget) < 0.3f)
+            {
+                ac.remainBulletTimeGain(particleGain);
+                particles[i].remainingLifetime = 0f;
+                fixedTargetPositions.Remove(particles[i].randomSeed);
+                if (numParticlesAlive < 5f)
+                {
+                    Destroy(gameObject, 5f);
+                }
+
+            }
         }
+        ps.SetParticles(particles, numParticlesAlive);
+
     }
 
     void OnEnable()
@@ -54,8 +75,9 @@ public class ParticleAttractor : MonoBehaviour
         timer = 0;
     }
 
-    public void SetTarget(Transform transform)
+    public void SetTarget(Transform transform, bool target)
     {
-        playerTransform = transform;
+        targetTransform = transform;
+        isTargetPlayer = target;
     }
 }

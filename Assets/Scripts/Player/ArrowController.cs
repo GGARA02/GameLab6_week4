@@ -77,6 +77,18 @@ public class ArrowController : MonoBehaviour
     [Header("Env")]
     [SerializeField]
     private float envAccel;
+    [Header("Idle")]
+    [SerializeField]
+    private float idleCircleRadius = 3f;
+    [SerializeField]
+    private float idleCircleSpeed = 1.5f;
+    [SerializeField]
+    float idleCircleEnterLerp = 3f;
+
+    private bool isIdleCircling = false;
+    private Vector3 idleCenterPosition;
+    private float idleCurrentAngle = 0f;
+
 
 
     private ArrowState arrowState;
@@ -388,6 +400,14 @@ public class ArrowController : MonoBehaviour
         velocity = envVelocity + moveVelocity;
         //이제 여기서 환경 값을 더해준 것으로 움직인다.
         characterController.Move(velocity * Time.deltaTime);
+
+        Vector3 horizontalMove = new Vector3(moveVelocity.x, 0f, moveVelocity.z);
+        if (horizontalMove.sqrMagnitude > 0.05f)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(horizontalMove);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, 10f * Time.deltaTime);
+        }
+
         velocity = characterController.velocity; //벽에 막힌 만큼 속도에도 반영
         //moveVelocity = characterController.velocity - envVelocity; // 벽에 막힌 만큼 입력 속도에서 제거
 
@@ -441,12 +461,38 @@ public class ArrowController : MonoBehaviour
         {
             moveDir -= brainTransform.up * input.DownInput * verticalRatio;
         }
-        //입력이 없으면 마찰처럼 감속
+        //입력이 없으면 마찰처럼 감속 -> 입력이 없으면 원 운동
         if (moveDir.sqrMagnitude < 0.0001f)
         {
-            moveVelocity = Vector3.MoveTowards(moveVelocity, Vector3.zero, decel * Time.deltaTime);
+            if (!isIdleCircling)
+            {
+                Vector3 currentHeading = transform.forward;
+                currentHeading.y = 0f;
+                if (currentHeading.sqrMagnitude < 0.01f)
+                {
+                    currentHeading = brainTransform.forward;
+                }
+                currentHeading.Normalize();
+
+                Vector3 rightOffset = Vector3.Cross(Vector3.up, currentHeading).normalized * idleCircleRadius;
+                idleCenterPosition = transform.position + rightOffset;
+
+                Vector3 fromCenter = transform.position - idleCenterPosition;
+                idleCurrentAngle = Mathf.Atan2(fromCenter.z, fromCenter.x);
+                isIdleCircling = true;
+
+            }
+            idleCurrentAngle += idleCircleSpeed * Time.deltaTime;
+
+            float targetX = idleCenterPosition.x + Mathf.Cos(idleCurrentAngle) * idleCircleRadius;
+            float targetZ = idleCenterPosition.z + Mathf.Sin(idleCurrentAngle) * idleCircleRadius;
+            Vector3 targetPos = new Vector3(targetX, transform.position.y, targetZ);
+
+            Vector3 desiredIdleVelocity = (targetPos - transform.position) / Time.deltaTime;
+            moveVelocity = Vector3.Lerp(moveVelocity, desiredIdleVelocity, idleCircleEnterLerp * Time.deltaTime);
             return;
         }
+        isIdleCircling = false;
         moveDir.Normalize();
 
         Vector3 along = Vector3.Project(moveVelocity, moveDir);        //입력 방향 성분
@@ -526,5 +572,10 @@ public class ArrowController : MonoBehaviour
 
         envScale = 1f;
         isHit = null;
+    }
+
+    public int GetBoostCount()
+    {
+        return maxBoostCount;
     }
 }

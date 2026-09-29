@@ -107,6 +107,8 @@ public class ArrowController : MonoBehaviour
     private int currentBoostCount;
     private float remainBoostCoolTime;
     private float pendingGain = 0;
+    private float envScale = 1.0f;
+    private Coroutine isHit;
 
     private HashSet<Collider> hitThisFarme = new();
 
@@ -180,6 +182,11 @@ public class ArrowController : MonoBehaviour
         {
             TorchTrigger torchTrigger = other.GetComponent<TorchTrigger>();
             torchTrigger.Exit();
+        }
+        else if (other.CompareTag("Drop") && isHit == null)
+        {
+            //환경 속도 줄이기, 인풋 빼기
+            isHit = StartCoroutine(hitCorutine());
         }
     }
 
@@ -377,7 +384,7 @@ public class ArrowController : MonoBehaviour
 
         //카메라가 보는 방향 기준 WASD 이동, 바닥과 벽은 CharacterController가 콜라이더로 막는다.
         UpdateVelocity(currentSpeed * trailRangeRatio);
-        envVelocity = Vector3.MoveTowards(envVelocity, desiredEnvVelocity, envAccel * Time.deltaTime);
+        envVelocity = Vector3.MoveTowards(envVelocity, desiredEnvVelocity * envScale, envAccel * Time.deltaTime);
         velocity = envVelocity + moveVelocity;
         //이제 여기서 환경 값을 더해준 것으로 움직인다.
         characterController.Move(velocity * Time.deltaTime);
@@ -486,5 +493,38 @@ public class ArrowController : MonoBehaviour
         maxBoostCount += count;
         currentBoostCount += count;
         OnBoostUpdate?.Invoke(currentBoostCount);
+    }
+
+    //4초 내에 두번 맞는 개폐급이 있을까?
+    public IEnumerator hitCorutine()
+    {
+        const float damageTime = 1.0f;
+        const float healTime = 3.0f;
+        const float ratio = 0.2f;
+
+        input.PlayerDisable();
+        envVelocity *= ratio;   // 맞는 순간 즉시 감속 (타격감)
+
+        float count = 0f;
+        while (count < damageTime)
+        {
+            count += Time.deltaTime;
+            envScale = Mathf.Lerp(1f, ratio, count / damageTime);
+            yield return null;
+        }
+
+        if (isActive)
+            input.PlayerEnable();
+
+        count = 0f;
+        while (count < healTime)
+        {
+            count += Time.deltaTime;
+            envScale = Mathf.Lerp(ratio, 1f, count / healTime);
+            yield return null;
+        }
+
+        envScale = 1f;
+        isHit = null;
     }
 }

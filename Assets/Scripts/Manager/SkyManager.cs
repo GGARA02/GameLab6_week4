@@ -81,17 +81,27 @@ public class SkyManager : MonoBehaviour
 
         //차후 관리
 
-        //float ratio = (float)lightUpCount / sunRiseMaxCount;
-        //if (sunRiseRoutine != null)
-        //{
-        //    StopCoroutine(sunRiseRoutine);
-        //}
-        //sunRiseRoutine = StartCoroutine(SunRiseRoutine(ratio));
+        float ratio = (float)lightUpCount / sunRiseMaxCount;
+        if (sunRiseRoutine != null)
+        {
+            StopCoroutine(sunRiseRoutine);
+        }
+        sunRiseRoutine = StartCoroutine(SunRiseRoutine(ratio));
 
         //if (lightUpCount == sunRiseMaxCount)
         //{
         //    StartCoroutine(GameClearRoutine());
         //}
+    }
+
+    public void CityLightDown()
+    {
+        lightUpCount = 0;
+        if (sunRiseRoutine != null)
+        {
+            StopCoroutine(sunRiseRoutine);
+        }
+        sunRiseRoutine = StartCoroutine(SunRiseRoutine(0f));
     }
 
     public void RealeaseLight(Transform transform, float remainBulletTime)

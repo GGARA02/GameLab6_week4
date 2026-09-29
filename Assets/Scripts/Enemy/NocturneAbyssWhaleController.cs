@@ -1,4 +1,6 @@
+using Unity.Cinemachine;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 public class NocturneAbyssWhaleController : MonoBehaviour
 {
@@ -14,6 +16,7 @@ public class NocturneAbyssWhaleController : MonoBehaviour
     private int _currentPointIndex = 0;
 
     [SerializeField] private NocturneAbyssWhaleDeath whaleDeath;
+    [SerializeField] private CinemachineImpulseSource source;
 
     private NocturneAbyssWhalePointSettings _currentStats;
     public FadeIOManager fadeIOManager;
@@ -21,6 +24,7 @@ public class NocturneAbyssWhaleController : MonoBehaviour
     void Awake()
     {
         fadeIOManager = FindFirstObjectByType<FadeIOManager>();
+        source = GetComponent<CinemachineImpulseSource>();
     }
 
     private void Update()
@@ -72,7 +76,7 @@ public class NocturneAbyssWhaleController : MonoBehaviour
         }
         if (_currentPointIndex == 4 || _currentPointIndex == 2)
         {
-            //여기요 임펄스
+            source.GenerateImpulse();
         }
         if (_currentPointIndex == 4)
         {

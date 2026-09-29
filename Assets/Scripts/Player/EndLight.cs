@@ -52,6 +52,7 @@ public class EndLight : MonoBehaviour
         pcc.Move(Vector3.zero);
         arrow.transform.position = new Vector3(0, 300, 2500);
         yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene(2);
         timeElapsed = 0;
         while (timeElapsed < beforeFadeOutTime)
         {
@@ -63,6 +64,5 @@ public class EndLight : MonoBehaviour
         }
 
         whitePanel.SetActive(false);
-        SceneManager.LoadScene(2);
     }
 }

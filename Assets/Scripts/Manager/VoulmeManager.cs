@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -25,6 +26,7 @@ public class VoulmeManager : MonoBehaviour
 
     private bool isActive;
     private Transform target;
+    private Transform brainTransform;
     private Volume volume;
     private Coroutine volumeChangeCoroutine;
     private Coroutine onHitCorutine;
@@ -42,6 +44,7 @@ public class VoulmeManager : MonoBehaviour
     public void Initialize(ArrowController controller)
     {
         target = controller.transform;
+        brainTransform = FindFirstObjectByType<CinemachineBrain>().transform;
         volume = defaultVolume;
         volume.weight = 1f;
         wallHit = new RaycastHit[4];
@@ -135,9 +138,10 @@ public class VoulmeManager : MonoBehaviour
         volumeChangeCoroutine = null;
     }
 
+    //현재 브레인(실제 카메라)과 플레이어 사이를 가리는 벽을 찾는다.
     private void DetectWall()
     {
-        Vector3 origin = transform.position;
+        Vector3 origin = brainTransform.position;
         Vector3 toTarget = target.position + target.forward * detectDistance - origin;
         int hitCount = Physics.RaycastNonAlloc(origin, toTarget, wallHit, toTarget.magnitude, wallLayerMask);
         for (int i = 0; i < hitCount; i++)

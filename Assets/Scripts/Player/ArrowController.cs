@@ -96,6 +96,7 @@ public class ArrowController : MonoBehaviour
     public System.Action OnGameOver;
 
     public System.Action<int> OnBoostUpdate;
+    public System.Action<Transform> OnRealeasePressed;
 
 
     private Vector3 moveVelocity = Vector3.zero;
@@ -192,7 +193,7 @@ public class ArrowController : MonoBehaviour
             OnLightUp?.Invoke();
             //불씨 획득 이펙트 생성
             GameObject obj = Instantiate(emberGainEffect, transform.position, Quaternion.identity);
-            obj.GetComponent<ParticleAttractor>().SetTarget(transform);
+            obj.GetComponent<ParticleAttractor>().SetTarget(transform, true);
 
             //불씨를 먹으면 대시, 대시 중에 또 먹으면 하이퍼대시
             if (arrowState == ArrowState.None)
@@ -346,6 +347,11 @@ public class ArrowController : MonoBehaviour
             {
                 currentSpeed = hyperDashSpeed;
             }
+        }
+
+        if (input.RealeasePressed)
+        {
+            OnRealeasePressed?.Invoke(transform);
         }
     }
 

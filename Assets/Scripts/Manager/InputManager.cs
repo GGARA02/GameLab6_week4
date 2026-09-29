@@ -14,6 +14,7 @@ public class InputManager : MonoBehaviour
     public bool DownPressing => inputActions?.Player.Down.IsPressed() ?? false;
     public float UpInput => inputActions?.Player.Up.ReadValue<float>() ?? 0f;
     public float DownInput => inputActions?.Player.Down.ReadValue<float>() ?? 0f;
+    public bool RealeasePressed => inputActions?.Player.Realease.WasPressedThisFrame() ?? false;
 
 
     //System

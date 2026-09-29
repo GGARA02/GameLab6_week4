@@ -42,12 +42,13 @@ public class GameFlowManager : MonoBehaviour
         arrowController.inputInit(inputManager);
         volumeManager.Initialize(arrowController);
         skyManager.Initialize();
-        gridManager.Initialize();
+        // gridManager.Initialize();
 
         arrowController.OnArrowStateChange += cameraManager.OnArrowStateChanged;
         arrowController.OnLightUp += skyManager.CityLightUp;
         arrowController.OnHitWall += volumeManager.HitWall;
         arrowController.OnGameOver += GameOver;
+        arrowController.OnRealeasePressed += skyManager.RealeaseLight;
         skyManager.OnGameClear += GameClear;
 
         GameStart();

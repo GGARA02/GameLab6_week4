@@ -409,7 +409,39 @@ public class ArrowController : MonoBehaviour
         }
 
         velocity = characterController.velocity; //벽에 막힌 만큼 속도에도 반영
-        //moveVelocity = characterController.velocity - envVelocity; // 벽에 막힌 만큼 입력 속도에서 제거
+                                                 //moveVelocity = characterController.velocity - envVelocity; // 벽에 막힌 만큼 입력 속도에서 제거
+
+        if (velocity.sqrMagnitude < 0.0001f)
+        {
+            if (!isIdleCircling)
+            {
+                Vector3 currentHeading = transform.forward;
+                currentHeading.y = 0f;
+                if (currentHeading.sqrMagnitude < 0.01f)
+                {
+                    currentHeading = brainTransform.forward;
+                }
+                currentHeading.Normalize();
+
+                Vector3 rightOffset = Vector3.Cross(Vector3.up, currentHeading).normalized * idleCircleRadius;
+                idleCenterPosition = transform.position + rightOffset;
+
+                Vector3 fromCenter = transform.position - idleCenterPosition;
+                idleCurrentAngle = Mathf.Atan2(fromCenter.z, fromCenter.x);
+                isIdleCircling = true;
+
+            }
+            idleCurrentAngle += idleCircleSpeed * Time.deltaTime;
+
+            float targetX = idleCenterPosition.x + Mathf.Cos(idleCurrentAngle) * idleCircleRadius;
+            float targetZ = idleCenterPosition.z + Mathf.Sin(idleCurrentAngle) * idleCircleRadius;
+            Vector3 targetPos = new Vector3(targetX, transform.position.y, targetZ);
+
+            Vector3 desiredIdleVelocity = (targetPos - transform.position) / Time.deltaTime;
+            moveVelocity = Vector3.Lerp(moveVelocity, desiredIdleVelocity, idleCircleEnterLerp * Time.deltaTime);
+            return;
+        }
+        isIdleCircling = false;
 
         trail.time = remainBulletTime; //남은 게이지만큼 트레일 길이
 
@@ -462,37 +494,7 @@ public class ArrowController : MonoBehaviour
             moveDir -= brainTransform.up * input.DownInput * verticalRatio;
         }
         //입력이 없으면 마찰처럼 감속 -> 입력이 없으면 원 운동
-        if (moveDir.sqrMagnitude < 0.0001f)
-        {
-            if (!isIdleCircling)
-            {
-                Vector3 currentHeading = transform.forward;
-                currentHeading.y = 0f;
-                if (currentHeading.sqrMagnitude < 0.01f)
-                {
-                    currentHeading = brainTransform.forward;
-                }
-                currentHeading.Normalize();
 
-                Vector3 rightOffset = Vector3.Cross(Vector3.up, currentHeading).normalized * idleCircleRadius;
-                idleCenterPosition = transform.position + rightOffset;
-
-                Vector3 fromCenter = transform.position - idleCenterPosition;
-                idleCurrentAngle = Mathf.Atan2(fromCenter.z, fromCenter.x);
-                isIdleCircling = true;
-
-            }
-            idleCurrentAngle += idleCircleSpeed * Time.deltaTime;
-
-            float targetX = idleCenterPosition.x + Mathf.Cos(idleCurrentAngle) * idleCircleRadius;
-            float targetZ = idleCenterPosition.z + Mathf.Sin(idleCurrentAngle) * idleCircleRadius;
-            Vector3 targetPos = new Vector3(targetX, transform.position.y, targetZ);
-
-            Vector3 desiredIdleVelocity = (targetPos - transform.position) / Time.deltaTime;
-            moveVelocity = Vector3.Lerp(moveVelocity, desiredIdleVelocity, idleCircleEnterLerp * Time.deltaTime);
-            return;
-        }
-        isIdleCircling = false;
         moveDir.Normalize();
 
         Vector3 along = Vector3.Project(moveVelocity, moveDir);        //입력 방향 성분
@@ -502,6 +504,7 @@ public class ArrowController : MonoBehaviour
         along = Vector3.MoveTowards(along, moveDir * maxSpeed, accel * Time.deltaTime);  //엑셀
 
         moveVelocity = along + side;
+
     }
 
     [ContextMenu("부스트 개수 증가")]

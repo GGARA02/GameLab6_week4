@@ -24,11 +24,13 @@ public class FadeIOManager : MonoBehaviour
 
     private IEnumerator FadeOutCoroutine(GameObject panel)
     {
+        arrow.isCutscene = true;
         panel.SetActive(true);
         Image image = panel.GetComponent<Image>();
         Color fadeColor = image.color;
         fadeColor.a = 0;
         image.color = fadeColor;
+
         float fadeTimeElapsed = 0;
         while (fadeTimeElapsed < fadeTime)
         {
@@ -37,20 +39,31 @@ public class FadeIOManager : MonoBehaviour
             image.color = fadeColor;
             yield return null;
         }
+
+        cc.enabled = false;
+
         Vector3 pos = new Vector3(0, -1800, 4100);
-        arrow.gameObject.transform.position = pos;
+        arrow.ResetMovementState(pos);
+
+        Physics.SyncTransforms();
+
         yield return new WaitForSeconds(fadeTime);
-        cc.Move(Vector3.down);
+
         fadeTimeElapsed = 0;
         while (fadeTimeElapsed < fadeTime * 2)
         {
             fadeTimeElapsed += Time.deltaTime;
             fadeColor.a = Mathf.Lerp(1, 0, fadeTimeElapsed / (fadeTime * 2));
             image.color = fadeColor;
+            arrow.gameObject.transform.position = pos;
             yield return null;
-
         }
-        cc.Move(Vector3.zero);
+
         panel.SetActive(false);
+
+        Physics.SyncTransforms();
+        yield return new WaitForFixedUpdate(); // 물리 프레임 안정화 대기
+        cc.enabled = true;
+        arrow.isCutscene = false;
     }
 }

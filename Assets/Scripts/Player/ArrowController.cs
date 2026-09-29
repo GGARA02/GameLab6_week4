@@ -123,9 +123,11 @@ public class ArrowController : MonoBehaviour
     private Coroutine isHit;
 
     private HashSet<Collider> hitThisFarme = new();
+    public bool isCutscene = false;
 
     private void Update()
     {
+        if (isCutscene) return;
         if (isActive)
         {
             HandleStateLogic();
@@ -580,5 +582,33 @@ public class ArrowController : MonoBehaviour
     public int GetBoostCount()
     {
         return maxBoostCount;
+    }
+
+    public void ResetMovementState(Vector3 newPosition)
+    {
+        if (characterController == null)
+            characterController = GetComponent<CharacterController>();
+
+        if (characterController != null)
+            characterController.enabled = false;
+
+        transform.position = newPosition;
+
+        moveVelocity = Vector3.zero;
+        envVelocity = Vector3.zero;
+        desiredEnvVelocity = Vector3.zero;
+        velocity = Vector3.zero;
+
+        isIdleCircling = false;
+        idleCenterPosition = newPosition;
+        idleCurrentAngle = 0f;
+
+        if (trail != null)
+            trail.Clear();
+
+        Physics.SyncTransforms();
+
+        if (characterController != null)
+            characterController.enabled = true;
     }
 }

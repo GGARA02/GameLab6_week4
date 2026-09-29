@@ -56,7 +56,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LaunchedBuilding
   attackIndicator: {fileID: 5484299331459830537}
-  attackDelay: 3
+  attackDelay: 2.5
 --- !u!1 &744577676448719117
 GameObject:
   m_ObjectHideFlags: 0
@@ -1300,7 +1300,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

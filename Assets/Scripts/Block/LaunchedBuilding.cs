@@ -12,7 +12,7 @@ public class LaunchedBuilding : MonoBehaviour
 
     private IEnumerator Initialize()
     {
-        attackIndicator.transform.position = new Vector3(transform.position.x, 0.1f, transform.position.z);
+        attackIndicator.transform.position = new Vector3(transform.position.x, -1999.9f, transform.position.z);
         Vector3 startScale = attackIndicator.transform.localScale;
         attackIndicator.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         float timeElapsed = 0;
@@ -28,7 +28,7 @@ public class LaunchedBuilding : MonoBehaviour
         float startPosY = transform.position.y;
         while (timeElapsed < 0.5f)
         {
-            float posY = Mathf.Lerp(startPosY, 0, timeElapsed / 0.5f);
+            float posY = Mathf.Lerp(startPosY, -2000, timeElapsed / 0.5f);
             Vector3 pos = new Vector3(transform.position.x, posY, transform.position.z);
             transform.position = pos;
             timeElapsed += Time.deltaTime;

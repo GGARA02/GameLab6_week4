@@ -99,7 +99,7 @@ public class SkyManager : MonoBehaviour
         if (!isReleasing)
         {
             isReleasing = true;
-            StartCoroutine(RealeaseLightRoutine(transform, remainBulletTime));
+            // StartCoroutine(RealeaseLightRoutine(transform, remainBulletTime));
         }
     }
 

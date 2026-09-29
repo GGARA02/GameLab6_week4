@@ -16,10 +16,16 @@ public class NocturneAbyssWhaleController : MonoBehaviour
     [SerializeField] private NocturneAbyssWhaleDeath whaleDeath;
 
     private NocturneAbyssWhalePointSettings _currentStats;
+    public FadeIOManager fadeIOManager;
+
+    void Awake()
+    {
+        fadeIOManager = FindFirstObjectByType<FadeIOManager>();
+    }
 
     private void Update()
     {
-        if(WhaleStop()) return; // 고래가 이동할 점이 없거나, 모든 점을 다 이동했으면 종료
+        if (WhaleStop()) return; // 고래가 이동할 점이 없거나, 모든 점을 다 이동했으면 종료
         UpdateStats(); // 현재 이동해야할 점이 원하는 고래의 스텟 설정값을 가져옵니다.
 
         ChangeDirection(); // 다음으로 이동할 점을 바라보도록 방향을 바꿉니다.
@@ -29,7 +35,7 @@ public class NocturneAbyssWhaleController : MonoBehaviour
 
     private bool WhaleStop()
     {
-        if(points == null || _currentPointIndex >= points.Length) // 현재 배열 이동 인덱스가 배열의 길이보다 크거나 같은가?
+        if (points == null || _currentPointIndex >= points.Length) // 현재 배열 이동 인덱스가 배열의 길이보다 크거나 같은가?
         {
             whaleDeath.CompleteStep();
             return true;
@@ -55,7 +61,7 @@ public class NocturneAbyssWhaleController : MonoBehaviour
         Vector3 direction =
             points[_currentPointIndex].position - transform.position; // 현재 위치에서 목표 위치를 바라볼 방향을 구함
 
-        if(direction != Vector3.zero) // 방향이 0이 아니면 (참고로 0이면 바라볼 방향이 없으므로 회전값을 적용하지 않음)
+        if (direction != Vector3.zero) // 방향이 0이 아니면 (참고로 0이면 바라볼 방향이 없으므로 회전값을 적용하지 않음)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
 
@@ -63,6 +69,14 @@ public class NocturneAbyssWhaleController : MonoBehaviour
                 transform.rotation,
                 targetRotation,
                 _currentStats.rotationSpeed * Time.deltaTime);
+        }
+        if (_currentPointIndex == 4 || _currentPointIndex == 2)
+        {
+            //여기요 임펄스
+        }
+        if (_currentPointIndex == 4)
+        {
+            fadeIOManager.StartFadeIO();
         }
     }
 
@@ -78,7 +92,7 @@ public class NocturneAbyssWhaleController : MonoBehaviour
     {
         Transform targetPoint = points[_currentPointIndex]; // 현재 가지고 있는 점을 체크
 
-        if(Vector3.Distance(transform.position, targetPoint.position) < 0.1f)
+        if (Vector3.Distance(transform.position, targetPoint.position) < 0.1f)
         {
             _currentPointIndex++; // 목표 점에 도착하면 다음 점을 목표로 설정
         }

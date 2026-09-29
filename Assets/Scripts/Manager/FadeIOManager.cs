@@ -7,8 +7,11 @@ public class FadeIOManager : MonoBehaviour
     [SerializeField] private GameObject whitePanel;
     [SerializeField] private GameObject blackPanel;
     [SerializeField] private float fadeTime = 2;
+    [SerializeField] SkyManager sky;
     private ArrowController arrow;
     private CharacterController cc;
+
+    private CameraManager cam;
     void Awake()
     {
         arrow = FindFirstObjectByType<ArrowController>();
@@ -25,7 +28,9 @@ public class FadeIOManager : MonoBehaviour
     private IEnumerator FadeOutCoroutine(GameObject panel)
     {
         arrow.isCutscene = true;
+        sky.CityLightDown();
         panel.SetActive(true);
+        cam.SetCamera(0);
         Image image = panel.GetComponent<Image>();
         Color fadeColor = image.color;
         fadeColor.a = 0;

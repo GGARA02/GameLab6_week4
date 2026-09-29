@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -76,6 +77,11 @@ public class CameraManager : MonoBehaviour
         _currentCamera = _cameraOrders[index];
     }
 
+    public void SetCamTemp(int index, float duration)
+    {
+        StartCoroutine(SetCamCorutine(index, duration));
+    }
+
     private FovSetting GetFovSetting(ArrowState state)
     {
         switch (state)
@@ -89,5 +95,13 @@ public class CameraManager : MonoBehaviour
             default:
                 return _defaultFov;
         }
+    }
+
+    //Pov로 돌아올거라는 것이라는 것
+    private IEnumerator SetCamCorutine(int index, float duration)
+    {
+        SetCamera(index);
+        yield return new WaitForSeconds(duration);
+        SetCamera(_PovIndex);
     }
 }

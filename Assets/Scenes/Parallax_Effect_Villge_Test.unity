@@ -73937,6 +73937,25 @@ MonoBehaviour:
   onStepComplete:
     m_PersistentCalls:
       m_Calls: []
+--- !u!4 &515077125 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5839819924126324775, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+  m_PrefabInstance: {fileID: 1141912084}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &515077126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 515077120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2a08951ceecb7b4daa0610e20564c96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ActivateEnemyAfterDelay
+  enemy: {fileID: 1637965415}
+  delayTime: 1
 --- !u!1 &515175260
 GameObject:
   m_ObjectHideFlags: 0
@@ -75018,7 +75037,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineSplineDolly
   m_SplineSettings:
     Spline: {fileID: 529938389}
-    Position: 0.029703714
+    Position: 0.027542707
     Units: 1
   SplineOffset: {x: 0, y: 0, z: 0}
   CameraRotation: 0
@@ -75094,7 +75113,7 @@ Transform:
   m_GameObject: {fileID: 518699892}
   serializedVersion: 2
   m_LocalRotation: {x: 0.06869671, y: -0.17322525, z: 0.012113088, w: 0.9824088}
-  m_LocalPosition: {x: 1365.4355, y: -14.536316, z: -74.64325}
+  m_LocalPosition: {x: 1371.4482, y: -14.547222, z: -74.66614}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -110825,7 +110844,7 @@ Transform:
   m_GameObject: {fileID: 751460494}
   serializedVersion: 2
   m_LocalRotation: {x: 0.110084645, y: 0.53270304, z: -0.07013167, w: 0.8361761}
-  m_LocalPosition: {x: 1527.5394, y: 70.32635, z: 971.12756}
+  m_LocalPosition: {x: 1518.9395, y: 70.32635, z: 971.12756}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -140229,7 +140248,7 @@ Transform:
   m_GameObject: {fileID: 953801986}
   serializedVersion: 2
   m_LocalRotation: {x: 0.110084645, y: 0.53270304, z: -0.07013167, w: 0.8361761}
-  m_LocalPosition: {x: 1527.5394, y: 70.32635, z: 971.12756}
+  m_LocalPosition: {x: 1518.9395, y: 70.32635, z: 971.12756}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -147119,8 +147138,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1001511174}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 793, y: 0, z: 1493}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1562, y: 568, z: 6442}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -147138,8 +147157,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 615a459903eca94459b289b2f9bae313, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NocturneAbyssWhalePointSettings
-  speed: 1600
-  rotationSpeed: 8
+  speed: 2880
+  rotationSpeed: 100
 --- !u!1 &1001617667
 GameObject:
   m_ObjectHideFlags: 0
@@ -159130,6 +159149,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1068286807}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1068811932
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1068811933}
+  m_Layer: 0
+  m_Name: Cut2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1068811933
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068811932}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1469.9637, y: -0, z: 1368.4578}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1068918574
 GameObject:
   m_ObjectHideFlags: 0
@@ -171195,21 +171245,61 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1537912984987221094, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 2004888119820420281, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 2335249927441278431, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
       propertyPath: m_Name
       value: WhaleDebris01
       objectReference: {fileID: 0}
+    - target: {fileID: 2335249927441278431, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2335249927441278431, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424010521956386578, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 2453584868602487283, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 2824333087833886068, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612279092014060319, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 4042889459819978830, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 4680324240745607149, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 5839819924126324775, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3742
+      value: 6156
       objectReference: {fileID: 0}
     - target: {fileID: 5839819924126324775, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.00000041766907
+      value: -702
       objectReference: {fileID: 0}
     - target: {fileID: 5839819924126324775, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2094
+      value: 5122
       objectReference: {fileID: 0}
     - target: {fileID: 5839819924126324775, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -171239,10 +171329,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5867053689960138295, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 6779534901801753434, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 6866159916585533472, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 7768128622241699942, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: nextWhale
+      value: 
+      objectReference: {fileID: 1637965415}
     - target: {fileID: 7768128622241699942, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
       propertyPath: whaleDeath
       value: 
       objectReference: {fileID: 515077123}
+    - target: {fileID: 7768128622241699942, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: points.Array.size
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7768128622241699942, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
       propertyPath: 'points.Array.data[0]'
       value: 
@@ -171254,14 +171364,40 @@ PrefabInstance:
     - target: {fileID: 7768128622241699942, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
       propertyPath: 'points.Array.data[2]'
       value: 
-      objectReference: {fileID: 1255763784}
+      objectReference: {fileID: 1913139523}
+    - target: {fileID: 7768128622241699942, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: 'points.Array.data[3]'
+      value: 
+      objectReference: {fileID: 1700923299}
+    - target: {fileID: 7768128622241699942, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: 'points.Array.data[4]'
+      value: 
+      objectReference: {fileID: 1959704495}
+    - target: {fileID: 7908978860640972725, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8672114641655590264, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 9113962317586294830, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 5839819924126324775, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 1736251973}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2335249927441278431, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 515077123}
+    - targetCorrespondingSourceObject: {fileID: 2335249927441278431, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 515077126}
   m_SourcePrefab: {fileID: 100100000, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
 --- !u!1 &1141960008
 GameObject:
@@ -188955,52 +189091,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1254920442}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1255763783
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1255763784}
-  - component: {fileID: 1255763785}
-  m_Layer: 0
-  m_Name: WhalePoint_3
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1255763784
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1255763783}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 382, y: 0, z: 2289}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1255763785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1255763783}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 615a459903eca94459b289b2f9bae313, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NocturneAbyssWhalePointSettings
-  speed: 400
-  rotationSpeed: 8
 --- !u!1 &1256191485
 GameObject:
   m_ObjectHideFlags: 0
@@ -210842,7 +210932,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab57a40c14677ff499f6fbb68f6ebb4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NocturneAbyssWhalePointEvantStarter
-  whaleSequenceController: {fileID: 0}
+  targetWhale: {fileID: 515077120}
   playerTag: Player
 --- !u!65 &1385552586
 BoxCollider:
@@ -210859,7 +210949,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -214781,6 +214871,90 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1411537025}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &1411796952
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2335249927441278431, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_Name
+      value: WhaleDebris02
+      objectReference: {fileID: 0}
+    - target: {fileID: 2335249927441278431, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2335249927441278431, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5839819924126324775, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -701
+      objectReference: {fileID: 0}
+    - target: {fileID: 5839819924126324775, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -702
+      objectReference: {fileID: 0}
+    - target: {fileID: 5839819924126324775, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 6348
+      objectReference: {fileID: 0}
+    - target: {fileID: 5839819924126324775, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5839819924126324775, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5839819924126324775, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5839819924126324775, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5839819924126324775, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5839819924126324775, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 5839819924126324775, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7768128622241699942, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: whaleDeath
+      value: 
+      objectReference: {fileID: 1637965416}
+    - target: {fileID: 7768128622241699942, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: 'points.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2048497806}
+    - target: {fileID: 7768128622241699942, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: 'points.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1001511175}
+    - target: {fileID: 7768128622241699942, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      propertyPath: 'points.Array.data[2]'
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2335249927441278431, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1637965416}
+  m_SourcePrefab: {fileID: 100100000, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
 --- !u!1 &1412377826
 GameObject:
   m_ObjectHideFlags: 0
@@ -241368,7 +241542,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6854239487222816145, guid: f75384accfa74f843acba3af43643af9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 966
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6854239487222816145, guid: f75384accfa74f843acba3af43643af9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -241376,7 +241550,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6854239487222816145, guid: f75384accfa74f843acba3af43643af9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1085
+      value: 991
       objectReference: {fileID: 0}
     - target: {fileID: 6854239487222816145, guid: f75384accfa74f843acba3af43643af9, type: 3}
       propertyPath: m_LocalRotation.w
@@ -249123,6 +249297,26 @@ Transform:
   - {fileID: 1026311727}
   m_Father: {fileID: 1032724152}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1637965415 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2335249927441278431, guid: e0c8cc4872c24d74e9b8f08ad0142a1e, type: 3}
+  m_PrefabInstance: {fileID: 1411796952}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1637965416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1637965415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3fc7e1576d308748b39e622820de3db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NocturneAbyssWhaleDeath
+  onStepComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1638772340
 GameObject:
   m_ObjectHideFlags: 0
@@ -258629,6 +258823,52 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1700677214}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1700923297
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1700923299}
+  - component: {fileID: 1700923298}
+  m_Layer: 0
+  m_Name: WhalePoint_4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1700923298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700923297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615a459903eca94459b289b2f9bae313, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NocturneAbyssWhalePointSettings
+  speed: 2880
+  rotationSpeed: 80
+--- !u!4 &1700923299
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700923297}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -734, y: 520, z: 6280}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1703074234
 GameObject:
   m_ObjectHideFlags: 0
@@ -263721,6 +263961,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1735851913}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1736251972
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1736251973}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1736251973
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1736251972}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -1.9375924, y: 2.0042999, z: 5.0373154}
+  m_LocalScale: {x: 0.009999997, y: 0.01, z: 0.009999997}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 515077125}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1737021590
 GameObject:
   m_ObjectHideFlags: 0
@@ -287873,6 +288144,52 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1912993834}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1913139521
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1913139523}
+  - component: {fileID: 1913139522}
+  m_Layer: 0
+  m_Name: WhalePoint_3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1913139522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1913139521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615a459903eca94459b289b2f9bae313, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NocturneAbyssWhalePointSettings
+  speed: 1440
+  rotationSpeed: 60
+--- !u!4 &1913139523
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1913139521}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 11, y: 872, z: 4407}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1913367336
 GameObject:
   m_ObjectHideFlags: 0
@@ -294869,6 +295186,52 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1958733103}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1959704493
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1959704495}
+  - component: {fileID: 1959704494}
+  m_Layer: 0
+  m_Name: WhalePoint_5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1959704494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1959704493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615a459903eca94459b289b2f9bae313, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NocturneAbyssWhalePointSettings
+  speed: 1440
+  rotationSpeed: 160
+--- !u!4 &1959704495
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1959704493}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2324, y: -1625, z: 5030}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1960582809
 GameObject:
   m_ObjectHideFlags: 0
@@ -303617,8 +303980,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2016877610}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00698816, y: 0.9476123, z: 0.02078034, w: -0.3186698}
-  m_LocalPosition: {x: 1549, y: 56.8, z: 992}
+  m_LocalRotation: {x: 0.006968596, y: 0.9482151, z: 0.020853313, w: -0.31686708}
+  m_LocalPosition: {x: 1540.4, y: 56.8, z: 992}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -309270,7 +309633,7 @@ Transform:
   m_GameObject: {fileID: 2048497805}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1343.6542, y: 0, z: 2343.186}
+  m_LocalPosition: {x: 2839, y: 141, z: 5149.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -309288,8 +309651,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 615a459903eca94459b289b2f9bae313, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NocturneAbyssWhalePointSettings
-  speed: 800
-  rotationSpeed: 8
+  speed: 2880
+  rotationSpeed: 40
 --- !u!1 &2048538830
 GameObject:
   m_ObjectHideFlags: 0
@@ -328494,7 +328857,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 481257680780498238, guid: 1b7b6debe8c6d0e44aa9e2271cf87f3f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1553
+      value: 1544.4
       objectReference: {fileID: 0}
     - target: {fileID: 481257680780498238, guid: 1b7b6debe8c6d0e44aa9e2271cf87f3f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -328666,9 +329029,13 @@ SceneRoots:
   - {fileID: 878485760}
   - {fileID: 1582699782}
   - {fileID: 531769525}
-  - {fileID: 1141912084}
   - {fileID: 1385552587}
+  - {fileID: 1141912084}
   - {fileID: 2058553133}
   - {fileID: 2048497806}
   - {fileID: 1001511175}
-  - {fileID: 1255763784}
+  - {fileID: 1913139523}
+  - {fileID: 1700923299}
+  - {fileID: 1959704495}
+  - {fileID: 1068811933}
+  - {fileID: 1411796952}

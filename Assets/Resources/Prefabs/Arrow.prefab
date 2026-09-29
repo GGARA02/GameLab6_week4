@@ -5491,22 +5491,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowController
   wispTail: {fileID: 5518632842067356640}
-  speed: 90
+  speed: 135
   invincibleTime: 2
   accel: 500
   decel: 300
   verticalRatio: 0.2
-  dashSpeed: 120
+  dashSpeed: 180
   dashCoolTime: 1.5
-  hyperDashSpeed: 150
+  hyperDashSpeed: 225
   hyperDashCoolTime: 1.5
-  startBulletTime: 0.3
+  startBulletTime: 0.1
   maxBulletTime: 0.3
   bulletTimeSpeed: 240
   bulletTimeScale: 0.3
-  bulletTimeDiscount: 0.001
+  bulletTimeDiscount: 0
   bulletTimeDuringDiscount: 60
-  bulletTimeLightUp: 0.1
+  bulletTimeLightUp: 0.05
   gainPerSecond: 0.05
   bulletWallHit: 0.06
   difficultSpeedUp: 0

@@ -32,11 +32,14 @@ public class SkyManager : MonoBehaviour
     private float lightUpTime = 10f; //불씨 하나당 밝아지는 데 걸리는 시간
     [Header("Realease Effect")]
     [SerializeField]
+    private int maxRealeaseCount = 3;
+    [SerializeField]
     private GameObject realeaseEffect;
     [SerializeField]
     private Transform villageTransform;
 
     public System.Action OnGameClear;
+    public System.Action<float> OnRealeaseFire;
 
     private Light sun;
     private Material sky;
@@ -76,38 +79,47 @@ public class SkyManager : MonoBehaviour
             return;
         }
 
-        float ratio = (float)lightUpCount / sunRiseMaxCount;
-        if (sunRiseRoutine != null)
-        {
-            StopCoroutine(sunRiseRoutine);
-        }
-        sunRiseRoutine = StartCoroutine(SunRiseRoutine(ratio));
+        //차후 관리
 
-        if (lightUpCount == sunRiseMaxCount)
-        {
-            StartCoroutine(GameClearRoutine());
-        }
+        //float ratio = (float)lightUpCount / sunRiseMaxCount;
+        //if (sunRiseRoutine != null)
+        //{
+        //    StopCoroutine(sunRiseRoutine);
+        //}
+        //sunRiseRoutine = StartCoroutine(SunRiseRoutine(ratio));
+
+        //if (lightUpCount == sunRiseMaxCount)
+        //{
+        //    StartCoroutine(GameClearRoutine());
+        //}
     }
 
-    public void RealeaseLight(Transform transform)
+    public void RealeaseLight(Transform transform, float remainBulletTime)
     {
         if (!isReleasing)
         {
             isReleasing = true;
-            StartCoroutine(RealeaseLightRoutine(transform));
+            StartCoroutine(RealeaseLightRoutine(transform, remainBulletTime));
         }
     }
 
-    private IEnumerator RealeaseLightRoutine(Transform transform)
+    //스테이지 당 3개 방출
+    private IEnumerator RealeaseLightRoutine(Transform transform, float remainBulletTime)
     {
         WaitForSeconds sec = new WaitForSeconds(0.5f);
-        for (int i = 0; i < lightUpCount; i++)
+        int count = Mathf.Min(lightUpCount, maxRealeaseCount);
+        float targetBulletTime = Mathf.Min((lightUpCount - count) * 0.05f + 0.1f, 0.3f);
+        float perGain = (remainBulletTime - targetBulletTime);
+        for (int i = 0; i < count; i++)
         {
             GameObject particle = Instantiate(realeaseEffect, transform.position, Quaternion.identity);
             ParticleAttractor pa = particle.GetComponent<ParticleAttractor>();
             pa.SetTarget(villageTransform, false);
+            lightUpCount--;
+            OnRealeaseFire?.Invoke(-(perGain / count));
             yield return sec;
         }
+
         isReleasing = false;
     }
 

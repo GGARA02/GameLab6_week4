@@ -54,7 +54,7 @@ public class ParticleAttractor : MonoBehaviour
             }
             particles[i].position = Vector3.MoveTowards(particles[i].position, currentTarget, speed * Time.deltaTime);
 
-            if (Vector3.Distance(particles[i].position, currentTarget) < 0.3f)
+            if (Vector3.Distance(particles[i].position, currentTarget) < 0.3f && targetTransform == ac.GetComponent<Transform>())
             {
                 ac.remainBulletTimeGain(particleGain);
                 particles[i].remainingLifetime = 0f;

@@ -96,8 +96,7 @@ public class ArrowController : MonoBehaviour
     public System.Action OnGameOver;
 
     public System.Action<int> OnBoostUpdate;
-    public System.Action<Transform> OnRealeasePressed;
-
+    public System.Action<Transform, float> OnRealeasePressed;
 
     private Vector3 moveVelocity = Vector3.zero;
     private Vector3 envVelocity = Vector3.zero;
@@ -351,7 +350,7 @@ public class ArrowController : MonoBehaviour
 
         if (input.RealeasePressed)
         {
-            OnRealeasePressed?.Invoke(transform);
+            OnRealeasePressed?.Invoke(transform, remainBulletTime);
         }
     }
 
@@ -394,11 +393,11 @@ public class ArrowController : MonoBehaviour
             GameOver();
         }
 
-        if (pendingGain > 0f)
+        if (pendingGain != 0f)
         {
-            float step = Mathf.Min(pendingGain, gainPerSecond * Time.deltaTime);
+            float step = Mathf.MoveTowards(0f, pendingGain, gainPerSecond * Time.deltaTime);
             pendingGain -= step;
-            remainBulletTime = Mathf.Min(remainBulletTime + step, maxBulletTime);
+            remainBulletTime = Mathf.Clamp(remainBulletTime + step, 0f, maxBulletTime);
         }
 
         //부스트 사용 채워 주기

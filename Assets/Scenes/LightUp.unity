@@ -488303,6 +488303,7 @@ MonoBehaviour:
   skyAtmoThickMin: 0.75
   skyAtmoThickMax: 3
   lightUpTime: 10
+  maxRealeaseCount: 3
   realeaseEffect: {fileID: 7564711585179036571, guid: a2edbc9580bff5749863be5fbb3f2d2d, type: 3}
   villageTransform: {fileID: 1566527952}
 --- !u!1 &1687575065
@@ -622899,6 +622900,22 @@ PrefabInstance:
     - target: {fileID: 481257680780498238, guid: 1b7b6debe8c6d0e44aa9e2271cf87f3f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3728062179043641716, guid: 1b7b6debe8c6d0e44aa9e2271cf87f3f, type: 3}
+      propertyPath: speed
+      value: 135
+      objectReference: {fileID: 0}
+    - target: {fileID: 3728062179043641716, guid: 1b7b6debe8c6d0e44aa9e2271cf87f3f, type: 3}
+      propertyPath: dashSpeed
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 3728062179043641716, guid: 1b7b6debe8c6d0e44aa9e2271cf87f3f, type: 3}
+      propertyPath: hyperDashSpeed
+      value: 225
+      objectReference: {fileID: 0}
+    - target: {fileID: 3728062179043641716, guid: 1b7b6debe8c6d0e44aa9e2271cf87f3f, type: 3}
+      propertyPath: startBoostCount
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4953731908064962096, guid: 1b7b6debe8c6d0e44aa9e2271cf87f3f, type: 3}
       propertyPath: m_LocalRotation.w

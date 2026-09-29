@@ -121559,12 +121559,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BackgroundFollowCam
   _cameraOrder: {fileID: 505178237}
   _povCam: {fileID: 751460499}
+  _group: {fileID: 0}
   _target: {fileID: 65135370}
   _camChangeTime: 0.5
   _camCancleAngle: 90
   _distanceRange: {x: 0, y: 200}
   _targetWeightRange: {x: 0, y: 0.15}
   _orbitRadiusRange: {x: 5, y: 100}
+  isColliderOff: 1
 --- !u!1 &1004211710
 GameObject:
   m_ObjectHideFlags: 0
@@ -211006,6 +211008,9 @@ MonoBehaviour:
   skyAtmoThickMin: 0.75
   skyAtmoThickMax: 3
   lightUpTime: 10
+  maxRealeaseCount: 3
+  realeaseEffect: {fileID: 0}
+  villageTransform: {fileID: 0}
 --- !u!1 &1687990796
 GameObject:
   m_ObjectHideFlags: 0
